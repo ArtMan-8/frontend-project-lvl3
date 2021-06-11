@@ -1,0 +1,69 @@
+{
+  "name": "@hexlet/code",
+  "version": "0.0.1",
+  "description": "RSS агрегатор - сервис для агрегации RSS-потоков, с помощью которых удобно читать разнообразные источники, например, блоги.",
+  "keywords": [
+    "javascript",
+    "rss",
+    "aggregator",
+    "feed"
+  ],
+  "author": "Vladimir Artyukhov",
+  "license": "ISC",
+  "private": true,
+  "main": "src/index.js",
+  "scripts": {
+    "start": "webpack serve --open",
+    "test": "jest --colors"
+  },
+  "jest": {
+    "verbose": true,
+    "testURL": "http://localhost/"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged",
+      "pre-push": ""
+    }
+  },
+  "lint-staged": {
+    "*.{js}": [
+      "prettier --config .prettierrc.json --write",
+      "eslint --config .eslintrc.json --fix"
+    ]
+  },
+  "devDependencies": {
+    "@babel/core": "^7.14.5",
+    "@babel/preset-env": "^7.14.5",
+    "babel-eslint": "^10.1.0",
+    "babel-jest": "^27.0.2",
+    "babel-loader": "^8.2.2",
+    "css-loader": "^5.2.6",
+    "eslint": "^7.28.0",
+    "eslint-config-airbnb": "^18.2.1",
+    "eslint-plugin-babel": "^5.3.1",
+    "eslint-plugin-import": "^2.23.4",
+    "eslint-plugin-jest": "^24.3.6",
+    "html-webpack-plugin": "^5.3.1",
+    "husky": "^6.0.0",
+    "jest": "^27.0.4",
+    "jest-cli": "^27.0.4",
+    "lint-staged": "^11.0.0",
+    "prettier": "^2.3.1",
+    "style-loader": "^2.0.0",
+    "webpack": "^5.38.1",
+    "webpack-cli": "^4.7.2",
+    "webpack-dev-server": "^3.11.2"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ArtMan-8/frontend-project-lvl3.git"
+  },
+  "bugs": {
+    "url": "https://github.com/ArtMan-8/frontend-project-lvl3/issues"
+  },
+  "homepage": "https://github.com/ArtMan-8/frontend-project-lvl3#readme",
+  "dependencies": {
+    "bootstrap": "^5.0.1"
+  }
+}
