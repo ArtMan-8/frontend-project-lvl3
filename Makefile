@@ -10,5 +10,8 @@ test:
 test-coverage:
 		npm test -- --coverage
 
+dev:
+		npm run start
+
 build:
 		npm run build
