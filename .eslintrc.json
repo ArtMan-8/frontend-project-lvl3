@@ -4,7 +4,11 @@
     "node": true,
     "jest": true
   },
-  "extends": ["eslint:recommended", "airbnb-base", "plugin:jest/recommended"],
+  "extends": [
+    "eslint:recommended",
+    "airbnb-base",
+    "plugin:jest/recommended"
+  ],
   "plugins": ["jest", "babel"],
   "parserOptions": {
     "sourceType": "module",
@@ -13,6 +17,8 @@
   "parser": "babel-eslint",
   "rules": {
     "no-console": "error",
+    "no-param-reassign": "off",
+    "arrow-parens": ["error", "always"],
     "prettier/prettier": "off"
   }
 }

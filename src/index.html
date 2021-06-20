@@ -9,24 +9,39 @@
     <title>RSS агрегатор</title>
   </head>
   <body class="d-flex flex-column min-vh-100">
-    <header class="container-fluid bg-dark">
+    <header
+      class="
+        container-fluid
+        d-flex
+        justify-content-between
+        align-items-center
+        bg-dark
+      "
+    >
       <div class="container-xl text-light p-3">
-        <h1>RSS агрегатор</h1>
-        <p>
-          Начните читать RSS сегодня!<br />
-          Это легко, это красиво.
+        <h1 id="title">RSS агрегатор</h1>
+        <p id="subTitle" class="m-0">
+          Начните читать RSS сегодня! Это легко, это красиво.
         </p>
       </div>
+
+      <div
+        id="languageSelect"
+        class="btn-group"
+        role="group"
+        aria-label="Выбор языка"
+      ></div>
     </header>
 
     <main class="flex-grow-1">
-      <section>
-        <div class="container-xl p-3">
+      <section class="bg-secondary">
+        <div class="container-xl p-3" style="max-width: 800px">
           <form
+            id="rss"
             class="d-flex justify-content-center align-items-center"
             action=""
           >
-            <div class="col form-floating m-2" style="max-width: 300px">
+            <div class="col form-floating m-2">
               <input
                 id="rss-input"
                 autofocus=""
@@ -43,10 +58,24 @@
               <button class="btn btn-primary" type="submit">Добавить</button>
             </div>
           </form>
+
+          <p id="example" class="m-2 mt-0" style="color: #000000">
+            Пример: https://ru.hexlet.io/lessons.rss
+          </p>
+          <p id="feedback" class="m-2 mt-0 small" style="color: transparent">
+            RSS успешно загружен
+          </p>
         </div>
       </section>
+
       <section>
-        <div class="container-xl"></div>
+        <div class="container-xl row">
+          <div
+            id="feeds"
+            class="col-md-10 col-lg-4 mx-auto order-0 order-lg-1"
+          ></div>
+          <div id="posts" class="col-md-10 col-lg-8 order-1 mx-auto"></div>
+        </div>
       </section>
     </main>
 
