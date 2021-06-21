@@ -14,6 +14,7 @@ export default {
         error: 'Ресурс не содержит валидный RSS',
         invalid: 'Ссылка должна быть валидным URL',
         success: 'RSS успешно загружен',
+        isExist: 'RSS уже существует',
       },
     },
   },

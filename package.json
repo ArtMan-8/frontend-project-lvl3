@@ -14,8 +14,8 @@
   "main": "src/index.js",
   "scripts": {
     "build": "webpack",
-    "format": "prettier \"./**/*.{js,jsx,ts,tsx}\" --write",
-    "lint": "eslint \"./**/*.{js,jsx,ts,tsx}\" --fix",
+    "format": "prettier \"./src/**/*.js\" --write",
+    "lint": "eslint \"./src/**/*.js\" --fix",
     "postinstall": "husky install",
     "start": "webpack serve --open",
     "test": "jest --colors"
@@ -25,7 +25,7 @@
     "testURL": "http://localhost/"
   },
   "lint-staged": {
-    "*.{js}": [
+    "./src/**/*.js": [
       "prettier --config ./.prettierrc.json --write",
       "eslint --config ./.eslintrc.json --fix"
     ]

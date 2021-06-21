@@ -8,7 +8,7 @@ import renderErrorMessage from './render/renderFeedbackMessage';
 
 const DEFAULT_LANGUAGE = 'en';
 
-const isValidUrl = url => {
+const isValidUrl = (url) => {
   const schema = yup.string().required().url();
   return schema.isValid(url);
 };
@@ -53,7 +53,7 @@ export default function app() {
         break;
       case 'formRss.url':
         isValidUrl(value)
-          .then(isValid => {
+          .then((isValid) => {
             watchedState.formRss.valid = isValid;
 
             if (!isValid) {
@@ -62,8 +62,7 @@ export default function app() {
 
             return value;
           })
-          .then(url => console.log(url))
-          .catch(error => renderErrorMessage(containers, error.message));
+          .catch((error) => renderErrorMessage(containers, error.message));
         break;
       default:
         break;

@@ -14,6 +14,7 @@ export default {
         error: 'Resource does not contain valid RSS',
         invalid: 'The link must be a valid URL',
         success: 'RSS loaded successfully',
+        isExist: 'RSS is exist',
       },
     },
   },
