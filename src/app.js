@@ -1,21 +1,16 @@
 import i18next from 'i18next';
-import onChange from 'on-change';
-import * as yup from 'yup';
-import renderUI from './render/renderUI';
-import addHandlers from './handlers/addHandlers';
+
+import renderUI from './renders/renderUI';
+import addUIHandlers from './handlers/addUIHandlers';
+import mainWatcher from './watchers/mainWatcher';
 import resources from './locales';
-import renderErrorMessage from './render/renderFeedbackMessage';
+import { FormProcessState } from './watchers/processWatcher';
 
-const DEFAULT_LANGUAGE = 'en';
-
-const isValidUrl = (url) => {
-  const schema = yup.string().required().url();
-  return schema.isValid(url);
-};
+const DEFAULT_LANGUAGE = 'ru';
 
 export default function app() {
-  const i18nInstance = i18next.createInstance();
-  i18nInstance.init({
+  const i18nextInstance = i18next.createInstance();
+  i18nextInstance.init({
     lng: DEFAULT_LANGUAGE,
     fallbackLng: Object.keys(resources),
     resources,
@@ -23,11 +18,13 @@ export default function app() {
 
   const state = {
     language: DEFAULT_LANGUAGE,
-    formRss: {
+    dataFeeds: [],
+    currentFeed: '',
+    message: '',
+    rssForm: {
       url: '',
-      valid: true,
-      error: false,
-      success: false,
+      isValid: '',
+      processState: FormProcessState.FILLING,
     },
   };
 
@@ -40,35 +37,14 @@ export default function app() {
     formLabel: document.querySelector('#rss label'),
     submitButton: document.querySelector('#rss button'),
     exampleMessage: document.querySelector('#example'),
+    feedbackMessage: document.querySelector('#feedback'),
     feedsContainer: document.querySelector('#feeds'),
     postsContainer: document.querySelector('#posts'),
+    modalContainer: document.querySelector('#modal'),
   };
 
-  const watchedState = onChange(state, (key, value) => {
-    switch (key) {
-      case 'language':
-        i18nInstance
-          .changeLanguage(value)
-          .then(() => renderUI(containers, i18nInstance));
-        break;
-      case 'formRss.url':
-        isValidUrl(value)
-          .then((isValid) => {
-            watchedState.formRss.valid = isValid;
+  const watchedState = mainWatcher(state, i18nextInstance, containers);
 
-            if (!isValid) {
-              throw new Error(i18nInstance.t('form.feedback.error'));
-            }
-
-            return value;
-          })
-          .catch((error) => renderErrorMessage(containers, error.message));
-        break;
-      default:
-        break;
-    }
-  });
-
-  renderUI(containers, i18nInstance);
-  addHandlers(containers, watchedState);
+  renderUI(containers, i18nextInstance, state);
+  addUIHandlers(containers, watchedState);
 }

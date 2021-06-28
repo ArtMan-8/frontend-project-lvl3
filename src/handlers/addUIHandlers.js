@@ -1,4 +1,6 @@
-export default function addHandlers(containers, watchedState) {
+import { FormProcessState } from '../watchers/processWatcher';
+
+export default function addUIHandlers(containers, watchedState) {
   const { rssForm, languageSelect } = containers;
 
   languageSelect.addEventListener('click', (event) => {
@@ -12,6 +14,7 @@ export default function addHandlers(containers, watchedState) {
     event.preventDefault();
     const formData = new FormData(event.target);
     const url = formData.get('rss');
-    watchedState.formRss.url = url;
+    watchedState.rssForm.processState = FormProcessState.SENDING;
+    watchedState.rssForm.url = url;
   });
 }

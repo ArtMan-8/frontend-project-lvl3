@@ -1,4 +1,8 @@
-export default function renderErrorMessage(containers, message) {
+export default function renderMessage(
+  containers,
+  i18nextInstance,
+  watchedState,
+) {
   const { rssForm } = containers;
 
   let feedbackMessage = document.querySelector('#feedback');
@@ -13,6 +17,8 @@ export default function renderErrorMessage(containers, message) {
 
   feedbackMessage.classList.add('text-warning');
 
-  feedbackMessage.textContent = message;
+  feedbackMessage.textContent = watchedState.message
+    ? i18nextInstance.t(`form.feedback.${watchedState.message}`)
+    : '';
   rssForm.parentNode.append(feedbackMessage);
 }

@@ -1,4 +1,4 @@
-name: Project test & build
+name: Project build
 
 on:
   push:
@@ -15,9 +15,6 @@ jobs:
 
       - name: Install 🔧
         run: make install
-
-      # - name: Run Test 🔨
-      #   run: make test
 
       - name: Build 👷
         run: make build

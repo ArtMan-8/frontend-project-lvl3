@@ -6,15 +6,21 @@ export default {
     subTitle: 'Начните читать RSS сегодня! Это легко, это красиво.',
     posts: 'Посты',
     feeds: 'Фиды',
+    buttons: {
+      add: 'Добавить',
+      view: 'Просмотр',
+      readAll: 'Читать полностью',
+      close: 'Закрыть',
+    },
     form: {
       placeholder: 'Ссылка RSS',
-      add: 'Добавить',
       example: 'Пример: https://ru.hexlet.io/lessons.rss',
       feedback: {
-        error: 'Ресурс не содержит валидный RSS',
+        errorRss: 'Ресурс не содержит валидный RSS',
         invalid: 'Ссылка должна быть валидным URL',
         success: 'RSS успешно загружен',
         isExist: 'RSS уже существует',
+        networkError: 'Ошибка сети',
       },
     },
   },

@@ -38,6 +38,6 @@ export default function renderUI(containers, i18nextInstance) {
   formLabel.textContent = i18nextInstance.t('form.placeholder');
   title.textContent = i18nextInstance.t('title');
   subTitle.textContent = i18nextInstance.t('subTitle');
-  submitButton.textContent = i18nextInstance.t('form.add');
+  submitButton.textContent = i18nextInstance.t('buttons.add');
   exampleMessage.textContent = i18nextInstance.t('form.example');
 }
