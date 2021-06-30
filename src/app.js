@@ -4,7 +4,7 @@ import renderUI from './renders/renderUI';
 import addUIHandlers from './handlers/addUIHandlers';
 import mainWatcher from './watchers/mainWatcher';
 import resources from './locales';
-import { FormProcessState } from './watchers/processWatcher';
+import { FormProcessState } from './const';
 
 const DEFAULT_LANGUAGE = 'ru';
 
@@ -45,6 +45,6 @@ export default function app() {
 
   const watchedState = mainWatcher(state, i18nextInstance, containers);
 
-  renderUI(containers, i18nextInstance, state);
-  addUIHandlers(containers, watchedState);
+  renderUI(containers, i18nextInstance, watchedState);
+  addUIHandlers(containers, i18nextInstance, watchedState);
 }

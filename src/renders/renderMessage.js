@@ -1,24 +1,18 @@
+import { Feedback } from '../const';
+
 export default function renderMessage(
   containers,
   i18nextInstance,
   watchedState,
 ) {
-  const { rssForm } = containers;
+  const { feedbackMessage } = containers;
 
-  let feedbackMessage = document.querySelector('#feedback');
+  const isSUccessMessage = () => (watchedState.message === Feedback.SUCCESS_FETCH
+    ? 'm-2 mt-0 position-absolute small text-info'
+    : 'm-2 mt-0 position-absolute small text-warning');
 
-  if (feedbackMessage) {
-    feedbackMessage.remove();
-  }
-
-  feedbackMessage = document.createElement('p');
-  feedbackMessage.setAttribute('id', 'feedback');
-  feedbackMessage.setAttribute('class', 'm-2 mt-0 position-absolute small');
-
-  feedbackMessage.classList.add('text-warning');
+  feedbackMessage.setAttribute('class', `${isSUccessMessage()}`);
 
   feedbackMessage.textContent = watchedState.message
-    ? i18nextInstance.t(`form.feedback.${watchedState.message}`)
-    : '';
-  rssForm.parentNode.append(feedbackMessage);
+    && i18nextInstance.t(`form.feedback.${watchedState.message}`);
 }

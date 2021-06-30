@@ -1,4 +1,4 @@
-export default function renderUI(containers, i18nextInstance) {
+export default function renderUI(containers, i18nextInstance, watchedState) {
   const {
     title,
     subTitle,
@@ -7,6 +7,7 @@ export default function renderUI(containers, i18nextInstance) {
     formLabel,
     submitButton,
     exampleMessage,
+    feedbackMessage,
   } = containers;
 
   languageSelect.textContent = '';
@@ -40,4 +41,7 @@ export default function renderUI(containers, i18nextInstance) {
   subTitle.textContent = i18nextInstance.t('subTitle');
   submitButton.textContent = i18nextInstance.t('buttons.add');
   exampleMessage.textContent = i18nextInstance.t('form.example');
+
+  feedbackMessage.textContent = watchedState.message
+    && i18nextInstance.t(`form.feedback.${watchedState.message}`);
 }

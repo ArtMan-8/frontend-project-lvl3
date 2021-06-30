@@ -1,7 +1,28 @@
-import { FormProcessState } from '../watchers/processWatcher';
+import * as yup from 'yup';
+import { Feedback } from '../const';
+import { renderModal } from '../renders/renderContent';
+import fetchRSS from './fetchRSS';
 
-export default function addUIHandlers(containers, watchedState) {
-  const { rssForm, languageSelect } = containers;
+const isValidUrl = (url) => {
+  const schema = yup.string().required().url();
+  return schema.isValid(url);
+};
+
+const isExistUrl = (data, url) => data.map((feed) => feed.url).includes(url);
+
+export default function addUIHandlers(
+  containers,
+  i18nextInstance,
+  watchedState,
+) {
+  const {
+    formInput,
+    rssForm,
+    languageSelect,
+    feedsContainer,
+    postsContainer,
+    modalContainer,
+  } = containers;
 
   languageSelect.addEventListener('click', (event) => {
     if (event.target.nodeName === 'INPUT') {
@@ -13,8 +34,45 @@ export default function addUIHandlers(containers, watchedState) {
   rssForm.addEventListener('submit', (event) => {
     event.preventDefault();
     const formData = new FormData(event.target);
-    const url = formData.get('rss');
-    watchedState.rssForm.processState = FormProcessState.SENDING;
-    watchedState.rssForm.url = url;
+    const url = formData.get('rss').trim();
+
+    isValidUrl(url).then((isvalid) => {
+      if (!isvalid) {
+        formInput.classList.add('is-invalid');
+        watchedState.message = Feedback.INVALID_RSS;
+        return;
+      }
+
+      formInput.classList.remove('is-invalid');
+
+      if (isExistUrl(watchedState.dataFeeds, url)) {
+        watchedState.message = Feedback.IS_EXIST_FEED;
+        return;
+      }
+
+      fetchRSS(watchedState, url);
+    });
+  });
+
+  feedsContainer.addEventListener('click', (event) => {
+    const feedPreview = event.target.closest('.list-group-item');
+
+    if (feedPreview) {
+      const selectedRss = feedPreview.dataset.url;
+      watchedState.currentFeed = selectedRss;
+    }
+  });
+
+  postsContainer.addEventListener('click', (event) => {
+    const buttonPreview = event.target.closest('.btn-outline-primary');
+
+    if (buttonPreview) {
+      const selectedTitle = buttonPreview.dataset.title;
+      const selectedPost = watchedState.dataFeeds
+        .flatMap(({ posts }) => posts)
+        .find(({ title }) => title === selectedTitle);
+
+      renderModal(modalContainer, selectedPost, i18nextInstance);
+    }
   });
 }

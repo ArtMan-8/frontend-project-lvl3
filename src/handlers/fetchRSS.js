@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { FormProcessState } from '../watchers/processWatcher';
+import { Feedback, FormProcessState } from '../const';
 
 const proxiedRequest = (url) => `https://hexlet-allorigins.herokuapp.com/get?url=${encodeURIComponent(url)}`;
 
@@ -24,11 +24,10 @@ export const getRssData = (rss) => {
 export const isValidRss = (rssData) => rssData.indexOf('xml version') !== -1;
 
 export default function fetchRSS(watchedState, rssUrl) {
+  watchedState.rssForm.processState = FormProcessState.SENDING;
+
   return axios
     .get(proxiedRequest(rssUrl))
-    .catch(() => {
-      watchedState.message = 'networkError';
-    })
     .then(({ data }) => {
       if (isValidRss(data.contents)) {
         const rawData = getRssData(data.contents);
@@ -37,19 +36,17 @@ export default function fetchRSS(watchedState, rssUrl) {
           url: rssUrl,
           ...rawData,
         });
-        watchedState.message = 'success';
-        watchedState.rssForm.processState = FormProcessState.FINISHED;
 
-        return rawData;
+        watchedState.currentFeed = rssUrl;
+        watchedState.message = Feedback.SUCCESS_FETCH;
+      } else {
+        watchedState.message = Feedback.NOT_RSS;
       }
 
-      watchedState.message = 'errorRss';
       watchedState.rssForm.processState = FormProcessState.FINISHED;
-
-      return null;
     })
     .catch(() => {
-      watchedState.message = 'networkError';
+      watchedState.message = Feedback.NETWORK_ERROR;
       watchedState.rssForm.processState = FormProcessState.FAILED;
     });
 }
