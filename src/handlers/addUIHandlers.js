@@ -1,6 +1,6 @@
 import * as yup from 'yup';
 import { Feedback } from '../const';
-import { renderModal } from '../renders/renderContent';
+import renderModal from '../renders/renderModal';
 import fetchRSS from './fetchRSS';
 
 const isValidUrl = (url) => {
@@ -45,7 +45,7 @@ export default function addUIHandlers(
 
       formInput.classList.remove('is-invalid');
 
-      if (isExistUrl(watchedState.dataFeeds, url)) {
+      if (isExistUrl(watchedState.feeds, url)) {
         watchedState.message = Feedback.IS_EXIST_FEED;
         return;
       }
@@ -68,11 +68,13 @@ export default function addUIHandlers(
 
     if (buttonPreview) {
       const selectedTitle = buttonPreview.dataset.title;
-      const selectedPost = watchedState.dataFeeds
-        .flatMap(({ posts }) => posts)
+      const selectedFeed = buttonPreview.dataset.feed;
+      const selectedPost = watchedState.posts
+        .get(selectedFeed)
         .find(({ title }) => title === selectedTitle);
 
-      renderModal(modalContainer, selectedPost, i18nextInstance);
+      watchedState.watchedPosts.add(selectedPost.title);
+      renderModal(modalContainer, i18nextInstance, selectedPost);
     }
   });
 }

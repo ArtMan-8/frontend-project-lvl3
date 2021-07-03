@@ -1,12 +1,10 @@
 import { Feedback } from '../const';
 
 export default function renderMessage(
-  containers,
+  feedbackMessage,
   i18nextInstance,
   watchedState,
 ) {
-  const { feedbackMessage } = containers;
-
   const isSUccessMessage = () => (watchedState.message === Feedback.SUCCESS_FETCH
     ? 'm-2 mt-0 position-absolute small text-info'
     : 'm-2 mt-0 position-absolute small text-warning');

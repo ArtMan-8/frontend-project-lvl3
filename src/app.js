@@ -5,8 +5,10 @@ import addUIHandlers from './handlers/addUIHandlers';
 import mainWatcher from './watchers/mainWatcher';
 import resources from './locales';
 import { FormProcessState } from './const';
+import updaterFeeds from './handlers/updaterFeeds';
 
 const DEFAULT_LANGUAGE = 'ru';
+const DELAY_UPDATE = 5000;
 
 export default function app() {
   const i18nextInstance = i18next.createInstance();
@@ -18,7 +20,10 @@ export default function app() {
 
   const state = {
     language: DEFAULT_LANGUAGE,
-    dataFeeds: [],
+    updateDelay: DELAY_UPDATE,
+    feeds: [],
+    posts: new Map(),
+    watchedPosts: new Set(),
     currentFeed: '',
     message: '',
     rssForm: {
@@ -47,4 +52,16 @@ export default function app() {
 
   renderUI(containers, i18nextInstance, watchedState);
   addUIHandlers(containers, i18nextInstance, watchedState);
+
+  let updateTimer = setTimeout(function updatePosts() {
+    updaterFeeds(watchedState)
+      .then(() => {
+        watchedState.updateDelay = DELAY_UPDATE;
+        updateTimer = setTimeout(updatePosts, watchedState.updateDelay);
+      })
+      .catch(() => {
+        watchedState.updateDelay *= 2;
+        updateTimer = setTimeout(updatePosts, watchedState.updateDelay);
+      });
+  }, watchedState.updateDelay);
 }

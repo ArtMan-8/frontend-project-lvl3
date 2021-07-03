@@ -1,4 +1,4 @@
-export default function postsMarkup(posts, i18nextInstance) {
+export default function postsMarkup(posts, currentFeed, i18nextInstance) {
   return `<div class="card border-0">
   <div class="card-body">
     <h2 class="card-title h4">${i18nextInstance.t('posts')}</h2>
@@ -7,7 +7,7 @@ export default function postsMarkup(posts, i18nextInstance) {
   <ul class="list-group border-0 rounded-0">
   ${posts
     .map(
-      ({ link, title }) => `
+      ({ link, title, watched }) => `
   <li
     class="
       list-group-item
@@ -19,7 +19,7 @@ export default function postsMarkup(posts, i18nextInstance) {
   >
     <a
       href="${link}"
-      class="fw-bold"
+      class="${watched ? 'fw-normal' : 'fw-bold'}"
       target="_blank"
       rel="noopener noreferrer"
       >${title}</a
@@ -29,6 +29,7 @@ export default function postsMarkup(posts, i18nextInstance) {
       data-bs-toggle="modal"
       data-bs-target="#modal"
       data-title="${title}"
+      data-feed="${currentFeed}"
     >
     ${i18nextInstance.t('buttons.view')}
     </button>
