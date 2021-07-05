@@ -9,7 +9,7 @@
     "airbnb-base",
     "plugin:jest/recommended"
   ],
-  "plugins": ["jest", "babel"],
+  "plugins": ["jest", "testing-library", "babel"],
   "parserOptions": {
     "sourceType": "module",
     "ecmaVersion": 2015

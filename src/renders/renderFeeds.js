@@ -6,7 +6,9 @@ export default function renderFeeds(
   watchedState,
 ) {
   const { feeds } = watchedState;
-  const content = feedsMarkup(feeds, i18nextInstance);
-  feedsContainer.innerHTML = '';
-  feedsContainer.insertAdjacentHTML('afterbegin', content);
+  if (feeds.length) {
+    const content = feedsMarkup(feeds, i18nextInstance);
+    feedsContainer.innerHTML = '';
+    feedsContainer.insertAdjacentHTML('afterbegin', content);
+  }
 }
