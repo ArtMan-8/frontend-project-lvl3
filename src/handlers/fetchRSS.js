@@ -1,8 +1,6 @@
 import axios from 'axios';
-import { Feedback, FormProcessState } from '../const';
+import { Feedback, FormProcessState, PROXY_URL } from '../const';
 import parseRssData from './parseRssData';
-
-export const proxiedRequest = (url) => `https://hexlet-allorigins.herokuapp.com/get?url=${encodeURIComponent(url)}`;
 
 const isValidRss = (rssData) => rssData.indexOf('xml version') !== -1;
 
@@ -10,7 +8,9 @@ export default function fetchRSS(watchedState, rssUrl) {
   watchedState.rssForm.processState = FormProcessState.SENDING;
 
   return axios
-    .get(proxiedRequest(rssUrl))
+    .get(`${PROXY_URL}/get`, {
+      params: { url: rssUrl, disableCache: true },
+    })
     .then(({ data }) => {
       if (isValidRss(data.contents)) {
         const rawData = parseRssData(data.contents);

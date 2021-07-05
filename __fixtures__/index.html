@@ -1,0 +1,146 @@
+<div
+  id="modal"
+  class="modal fade"
+  tabindex="-1"
+  aria-labelledby="modal"
+  aria-hidden="true"
+  wfd-invisible="true"
+  data-testid="modal"
+  role="dialog"
+  name="modal"
+  aria-label="modal"
+>
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel"></h5>
+        <button
+          type="button"
+          class="btn-close close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body"></div>
+      <div class="modal-footer">
+        <a
+          class="btn btn-primary full-article"
+          href=""
+          role="button"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+        </a>
+        <button
+          type="button"
+          class="btn btn-secondary"
+          data-bs-dismiss="modal"
+        ></button>
+      </div>
+    </div>
+  </div>
+</div>
+<header
+  class="
+    container-fluid
+    d-flex
+    justify-content-between
+    align-items-center
+    bg-dark
+  "
+>
+  <div
+    class="container-xl raw d-flex justify-content-between align-items-center"
+  >
+    <div class="text-light p-3">
+      <h1 id="title">RSS агрегатор</h1>
+      <p id="subTitle" class="m-0">
+        Начните читать RSS сегодня! Это легко, это красиво.
+      </p>
+    </div>
+
+    <div
+      id="languageSelect"
+      class="btn-group"
+      role="group"
+      name="Language Select"
+      aria-label="Language Select"
+    ></div>
+  </div>
+</header>
+
+<main class="flex-grow-1">
+  <section class="bg-secondary">
+    <div class="container-xl p-3 pb-5" style="max-width: 800px">
+      <form
+        id="rss"
+        class="d-flex justify-content-center align-items-center"
+        action=""
+      >
+        <div class="col form-floating m-2">
+          <input
+            id="rss-input"
+            autofocus=""
+            required=""
+            name="url"
+            aria-label="url"
+            role="textbox"
+            class="form-control w-100"
+            placeholder="ссылка RSS"
+          />
+          <label for="rss-input">Ссылка RSS</label>
+        </div>
+
+        <div class="col-md-auto m-2">
+          <button
+            class="btn btn-primary btn-lg"
+            type="submit"
+            name="add"
+            aria-label="add"
+            role="button"
+          >
+            Добавить
+          </button>
+        </div>
+      </form>
+
+      <p id="example" class="m-2 mt-0" style="color: #000000">
+        Пример: https://ru.hexlet.io/lessons.rss
+      </p>
+      <p
+        id="feedback"
+        name="feedback"
+        aria-label="feedback"
+        role="status"
+        class="m-2 mt-0 position-absolute small"
+      ></p>
+    </div>
+  </section>
+
+  <section>
+    <div class="row container-xl mx-auto" data-testid="content">
+      <div
+        id="posts"
+        class="col-md-10 col-lg-8 order-1 mx-auto"
+        data-testid="posts"
+      ></div>
+
+      <div
+        id="feeds"
+        class="col-md-10 col-lg-4 mx-auto order-0 order-lg-1"
+        data-testid="feeds"
+      ></div>
+    </div>
+  </section>
+</main>
+
+<footer class="container-fluid mt-5 bg-dark">
+  <div class="container-xl text-light p-3">
+    <p class="text-center m-0">
+      edited by
+      <a href="https://github.com/ArtMan-8" target="_blank" class="text-info"
+        >ArtMan</a
+      >
+    </p>
+  </div>
+</footer>

@@ -3,7 +3,7 @@ export default {
     language: 'en',
     languageSelect: 'language select',
     title: 'RSS aggregator',
-    subTitle: "Start reading RSS today! It's easy, it's beautiful.",
+    subTitle: 'Start reading RSS today! It is easy, it is beautiful.',
     posts: 'Posts',
     feeds: 'Feeds',
     buttons: {

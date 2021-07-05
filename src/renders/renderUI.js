@@ -31,10 +31,6 @@ export default function renderUI(containers, i18nextInstance, watchedState) {
     languageSelect.append(label);
   });
 
-  languageSelect.setAttribute(
-    'aria-label',
-    i18nextInstance.t('languageSelect'),
-  );
   formInput.setAttribute('placeholder', i18nextInstance.t('form.placeholder'));
   formLabel.textContent = i18nextInstance.t('form.placeholder');
   title.textContent = i18nextInstance.t('title');

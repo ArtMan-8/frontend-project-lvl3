@@ -16,6 +16,9 @@
       aria-labelledby="modal"
       aria-hidden="true"
       wfd-invisible="true"
+      role="dialog"
+      name="modal"
+      aria-label="modal"
     >
       <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -76,7 +79,8 @@
           id="languageSelect"
           class="btn-group"
           role="group"
-          aria-label="Выбор языка"
+          name="Language Select"
+          aria-label="Language Select"
         ></div>
       </div>
     </header>
@@ -94,8 +98,9 @@
                 id="rss-input"
                 autofocus=""
                 required=""
-                name="rss"
-                aria-label="rss"
+                name="url"
+                aria-label="url"
+                role="textbox"
                 class="form-control w-100"
                 placeholder="ссылка RSS"
               />
@@ -103,14 +108,28 @@
             </div>
 
             <div class="col-md-auto m-2">
-              <button class="btn btn-primary" type="submit">Добавить</button>
+              <button
+                class="btn btn-primary btn-lg"
+                type="submit"
+                name="add"
+                aria-label="add"
+                role="button"
+              >
+                Добавить
+              </button>
             </div>
           </form>
 
           <p id="example" class="m-2 mt-0" style="color: #000000">
             Пример: https://ru.hexlet.io/lessons.rss
           </p>
-          <p id="feedback" class="m-2 mt-0 position-absolute small"></p>
+          <p
+            id="feedback"
+            name="feedback"
+            aria-label="feedback"
+            role="status"
+            class="m-2 mt-0 position-absolute small"
+          ></p>
         </div>
       </section>
 

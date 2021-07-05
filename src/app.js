@@ -1,14 +1,11 @@
 import i18next from 'i18next';
 
+import { DEFAULT_LANGUAGE, DELAY_UPDATE, FormProcessState } from './const';
 import renderUI from './renders/renderUI';
 import addUIHandlers from './handlers/addUIHandlers';
 import mainWatcher from './watchers/mainWatcher';
 import resources from './locales';
-import { FormProcessState } from './const';
-import updaterFeeds from './handlers/updaterFeeds';
-
-const DEFAULT_LANGUAGE = 'ru';
-const DELAY_UPDATE = 5000;
+import postsRefetch from './handlers/updaterFeeds';
 
 export default function app() {
   const i18nextInstance = i18next.createInstance();
@@ -52,16 +49,5 @@ export default function app() {
 
   renderUI(containers, i18nextInstance, watchedState);
   addUIHandlers(containers, i18nextInstance, watchedState);
-
-  let updateTimer = setTimeout(function updatePosts() {
-    updaterFeeds(watchedState)
-      .then(() => {
-        watchedState.updateDelay = DELAY_UPDATE;
-        updateTimer = setTimeout(updatePosts, watchedState.updateDelay);
-      })
-      .catch(() => {
-        watchedState.updateDelay *= 2;
-        updateTimer = setTimeout(updatePosts, watchedState.updateDelay);
-      });
-  }, watchedState.updateDelay);
+  postsRefetch(watchedState);
 }

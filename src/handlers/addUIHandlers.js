@@ -34,23 +34,23 @@ export default function addUIHandlers(
   rssForm.addEventListener('submit', (event) => {
     event.preventDefault();
     const formData = new FormData(event.target);
-    const url = formData.get('rss').trim();
+    const url = formData.get('url').trim();
 
-    isValidUrl(url).then((isvalid) => {
-      if (!isvalid) {
-        formInput.classList.add('is-invalid');
-        watchedState.message = Feedback.INVALID_RSS;
+    isValidUrl(url).then((isValid) => {
+      if (isValid) {
+        if (isExistUrl(watchedState.feeds, url)) {
+          watchedState.message = Feedback.IS_EXIST_FEED;
+          return;
+        }
+
+        formInput.classList.remove('is-invalid');
+        fetchRSS(watchedState, url);
+        formInput.value = '';
         return;
       }
 
-      formInput.classList.remove('is-invalid');
-
-      if (isExistUrl(watchedState.feeds, url)) {
-        watchedState.message = Feedback.IS_EXIST_FEED;
-        return;
-      }
-
-      fetchRSS(watchedState, url);
+      formInput.classList.add('is-invalid');
+      watchedState.message = Feedback.INVALID_RSS;
     });
   });
 

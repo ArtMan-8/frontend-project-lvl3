@@ -9,11 +9,11 @@ export default function processWatcher(containers, watchedState) {
     case FormProcessState.FILLING:
       break;
     case FormProcessState.SENDING:
-      formInput.setAttribute('disabled', 'true');
+      formInput.setAttribute('readonly', 'true');
       submitButton.setAttribute('disabled', 'true');
       break;
     case FormProcessState.FINISHED:
-      formInput.removeAttribute('disabled');
+      formInput.removeAttribute('readonly');
       submitButton.removeAttribute('disabled');
       watchedState.rssForm.processState = FormProcessState.FILLING;
       break;
