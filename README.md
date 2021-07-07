@@ -5,5 +5,27 @@
 <a target="_blank" href="https://artman-8.github.io/frontend-project-lvl3/"><img src="https://img.shields.io/badge/сайт-онлайн-000000?style=flat-square&labelColor=black"/></a>
 
 ## Описание
-
 Сервис для агрегации RSS-потоков, с помощью которых удобно читать разнообразные источники, например, блоги. Он позволяет добавлять неограниченное количество RSS-лент, сам их обновляет и добавляет новые записи в общий поток.
+
+### Инструменты
+- сборка **webpack**
+- вёрстка с ипользованием **bootstrap**
+- организация текстов интерфейса через **i18next**
+- запросы через **axios**
+- тестирование с использованием **testing-library**
+- насторены **pre-commit** и **pre-push** хуки
+
+
+---
+### Использование
+
+```bash
+$ make install        - Установка зависимостей
+$ make lint           - Запуск линтинга
+$ make test           - Запуск тестов
+$ make test-coverage  - Запуск тестов с покрытием
+$ make dev            - Запуск в режиме разработки
+$ make build          - Сборока проекта
+```
+
+### **<a target="_blank" href="https://artman-8.github.io/frontend-project-lvl3/">Посмотреть RSS App онлайн</a>**
