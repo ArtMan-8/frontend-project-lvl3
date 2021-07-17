@@ -1,4 +1,4 @@
-export default function postsMarkup(posts, currentFeed, i18nextInstance) {
+export default function postsMarkup(posts, i18nextInstance) {
   return `<div class="card border-0">
   <div class="card-body">
     <h2 class="card-title h4">${i18nextInstance.t('posts')}</h2>
@@ -16,6 +16,7 @@ export default function postsMarkup(posts, currentFeed, i18nextInstance) {
       align-items-start
       border-0 border-end-0
     "
+    data-title="${title}"
   >
     <a
       href="${link}"
@@ -28,8 +29,6 @@ export default function postsMarkup(posts, currentFeed, i18nextInstance) {
       class="btn btn-outline-primary btn-sm"
       data-bs-toggle="modal"
       data-bs-target="#modal"
-      data-title="${title}"
-      data-feed="${currentFeed}"
     >
     ${i18nextInstance.t('buttons.view')}
     </button>

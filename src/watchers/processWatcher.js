@@ -1,22 +1,26 @@
-import { FormProcessState } from '../const';
+import { formProcessState } from '../constants';
 
 export default function processWatcher(containers, watchedState) {
   const { formInput, submitButton } = containers;
   switch (watchedState.rssForm.processState) {
-    case FormProcessState.FAILED:
-      watchedState.rssForm.processState = FormProcessState.FILLING;
+    case formProcessState.FAILED:
+      watchedState.rssForm.processState = formProcessState.FILLING;
       break;
-    case FormProcessState.FILLING:
+
+    case formProcessState.FILLING:
       break;
-    case FormProcessState.SENDING:
+
+    case formProcessState.SENDING:
       formInput.setAttribute('readonly', 'true');
       submitButton.setAttribute('disabled', 'true');
       break;
-    case FormProcessState.FINISHED:
+
+    case formProcessState.FINISHED:
       formInput.removeAttribute('readonly');
       submitButton.removeAttribute('disabled');
-      watchedState.rssForm.processState = FormProcessState.FILLING;
+      watchedState.rssForm.processState = formProcessState.FILLING;
       break;
+
     default:
       throw new Error(`Unknown state: ${watchedState}`);
   }

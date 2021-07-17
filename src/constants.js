@@ -2,7 +2,7 @@ export const DEFAULT_LANGUAGE = 'ru';
 export const DELAY_UPDATE = 5000;
 export const PROXY_URL = 'https://hexlet-allorigins.herokuapp.com';
 
-export const Feedback = {
+export const feedback = {
   NOT_RSS: 'notRss',
   INVALID_RSS: 'invalidRss',
   SUCCESS_FETCH: 'successFetch',
@@ -10,7 +10,7 @@ export const Feedback = {
   NETWORK_ERROR: 'networkError',
 };
 
-export const FormProcessState = {
+export const formProcessState = {
   FILLING: 'filling',
   SENDING: 'sending',
   FINISHED: 'finished',

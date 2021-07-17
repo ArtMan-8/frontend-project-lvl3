@@ -4,7 +4,7 @@ import '@testing-library/jest-dom';
 import { screen } from '@testing-library/dom';
 import i18next from 'i18next';
 import app from '../src/app';
-import { DEFAULT_LANGUAGE, Feedback } from '../src/const';
+import { DEFAULT_LANGUAGE, feedback } from '../src/constants';
 import resources from '../src/locales';
 import renderContent from '../src/renders/renderContent';
 import renderMessage from '../src/renders/renderMessage';
@@ -38,13 +38,12 @@ describe('Test renders', () => {
     });
 
     interact.selectedPost = {
-      title: 'Lorem ipsum 2021-07-07T08:33:00Z',
-      description: 'Laboris ea non culpa mollit eiusmod aliqua in dolor nulla ullamco ea consequat eu.',
-      link: 'http://example.com/test/1625646780',
+      title: 'Lorem ipsum 2021-07-17T08:49:00Z',
+      description: 'Irure in ullamco consectetur laboris nulla.',
+      link: 'http://example.com/test/1626511740',
     };
 
     interact.watchedState = {
-      currentFeed: 'http://lorem-rss.herokuapp.com/feed',
       feeds: [
         {
           url: 'http://lorem-rss.herokuapp.com/feed',
@@ -53,63 +52,29 @@ describe('Test renders', () => {
           description: 'This is a constantly updating lorem ipsum feed',
         },
       ],
-      watchedPosts: new Set().add('Lorem ipsum 2021-07-07T08:35:00Z'),
-      posts: new Map([
-        [
-          'http://lorem-rss.herokuapp.com/feed',
-          [
-            {
-              title: 'Lorem ipsum 2021-07-07T08:35:00Z',
-              description: 'Incididunt quis exercitation ad aliquip ut.',
-              link: 'http://example.com/test/1625646900',
-            },
-            {
-              title: 'Lorem ipsum 2021-07-07T08:34:00Z',
-              description: 'Sunt voluptate excepteur enim id Lorem.',
-              link: 'http://example.com/test/1625646840',
-            },
-            {
-              title: 'Lorem ipsum 2021-07-07T08:33:00Z',
-              description: 'Laboris ea non culpa mollit eiusmod aliqua in dolor nulla ullamco ea consequat eu.',
-              link: 'http://example.com/test/1625646780',
-            },
-            {
-              title: 'Lorem ipsum 2021-07-07T08:32:00Z',
-              description: 'Anim ea ea qui enim do incididunt ipsum.',
-              link: 'http://example.com/test/1625646720',
-            },
-            {
-              title: 'Lorem ipsum 2021-07-07T08:31:00Z',
-              description: 'Qui ullamco mollit in eiusmod enim magna culpa.',
-              link: 'http://example.com/test/1625646660',
-            },
-            {
-              title: 'Lorem ipsum 2021-07-07T08:30:00Z',
-              description: 'Sit amet proident sit duis ut commodo tempor magna incididunt.',
-              link: 'http://example.com/test/1625646600',
-            },
-            {
-              title: 'Lorem ipsum 2021-07-07T08:29:00Z',
-              description: 'Labore veniam qui sit esse pariatur aliqua esse culpa proident excepteur cillum.',
-              link: 'http://example.com/test/1625646540',
-            },
-            {
-              title: 'Lorem ipsum 2021-07-07T08:28:00Z',
-              description: 'Excepteur irure consequat excepteur cupidatat dolor amet mollit voluptate culpa.',
-              link: 'http://example.com/test/1625646480',
-            },
-            {
-              title: 'Lorem ipsum 2021-07-07T08:27:00Z',
-              description: 'Consequat elit eiusmod consectetur do non Lorem exercitation minim sit.',
-              link: 'http://example.com/test/1625646420',
-            },
-            {
-              title: 'Lorem ipsum 2021-07-07T08:26:00Z',
-              description: 'Nostrud eu culpa commodo sit labore consectetur tempor qui do in culpa ipsum do.',
-              link: 'http://example.com/test/1625646360',
-            },
-          ],
-        ]]),
+      ui: {
+        watchedPosts: new Set().add('Lorem ipsum 2021-07-07T08:35:00Z'),
+      },
+      posts: [{
+        title: 'Lorem ipsum 2021-07-17T08:49:00Z',
+        description: 'Irure in ullamco consectetur laboris nulla.',
+        link: 'http://example.com/test/1626511740',
+      },
+      {
+        title: 'Lorem ipsum 2021-07-17T08:48:00Z',
+        description: 'Ullamco exercitation adipisicing labore exercitation officia non.',
+        link: 'http://example.com/test/1626511680',
+      },
+      {
+        title: 'Lorem ipsum 2021-07-17T08:47:00Z',
+        description: 'Commodo enim irure do sunt commodo.',
+        link: 'http://example.com/test/1626511620',
+      },
+      {
+        title: 'Lorem ipsum 2021-07-17T08:46:00Z',
+        description: 'Non voluptate aliqua qui voluptate sunt sunt sint minim pariatur deserunt.',
+        link: 'http://example.com/test/1626511560',
+      }],
     };
 
     await app();
@@ -169,12 +134,11 @@ describe('Test renders', () => {
     expect(await screen.findByText(interact.selectedPost.description)).toBeInTheDocument();
   });
 
-  test('success message', async () => {
-    interact.watchedState = {
-      message: Feedback.SUCCESS_FETCH,
-    };
+  test('success feedback', async () => {
+    const isError = false;
+    interact.watchedState.feedback = feedback.SUCCESS_FETCH;
 
-    renderMessage(
+    renderMessage(isError)(
       interact.feedbackr,
       interact.i18nextInstance,
       interact.watchedState,
@@ -185,12 +149,11 @@ describe('Test renders', () => {
     );
   });
 
-  test('error message', async () => {
-    interact.watchedState = {
-      message: Feedback.NETWORK_ERROR,
-    };
+  test('error feedback', async () => {
+    const isError = true;
+    interact.watchedState.feedback = feedback.NETWORK_ERROR;
 
-    renderMessage(
+    renderMessage(isError)(
       interact.feedbackr,
       interact.i18nextInstance,
       interact.watchedState,

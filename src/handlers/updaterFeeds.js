@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import axios from 'axios';
 import parseRssData from './parseRssData';
-import { DELAY_UPDATE, PROXY_URL } from '../const';
+import { DELAY_UPDATE, PROXY_URL } from '../constants';
 
 function updaterFeeds(watchedState) {
   const requests = watchedState.feeds.map((feed) => axios
@@ -19,14 +19,12 @@ function updaterFeeds(watchedState) {
   return Promise.all(requests);
 }
 
-export default function postsRefetch(watchedState) {
+export default function postsRefetch(watchedState, delay = DELAY_UPDATE) {
   updaterFeeds(watchedState)
     .then(() => {
-      watchedState.updateDelay = DELAY_UPDATE;
-      setTimeout(() => postsRefetch(watchedState), watchedState.updateDelay);
+      setTimeout(() => postsRefetch(watchedState), delay);
     })
     .catch(() => {
-      watchedState.updateDelay *= 2;
-      setTimeout(() => postsRefetch(watchedState), watchedState.updateDelay);
+      setTimeout(() => postsRefetch(watchedState), delay * 2);
     });
 }

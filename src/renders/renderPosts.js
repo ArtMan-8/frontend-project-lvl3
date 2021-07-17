@@ -5,17 +5,15 @@ export default function renderPosts(
   i18nextInstance,
   watchedState,
 ) {
-  const { posts, currentFeed } = watchedState;
+  const { posts } = watchedState;
 
-  if (posts.size) {
-    const selectedPosts = posts.get(currentFeed);
-
-    const postsToRender = selectedPosts.map((post) => ({
+  if (posts.length) {
+    const postsToRender = posts.map((post) => ({
       ...post,
-      watched: watchedState.watchedPosts.has(post.title),
+      watched: watchedState.ui.watchedPosts.has(post.title),
     }));
 
-    const content = postsMarkup(postsToRender, currentFeed, i18nextInstance);
+    const content = postsMarkup(postsToRender, i18nextInstance);
     postsContainer.innerHTML = '';
     postsContainer.insertAdjacentHTML('afterbegin', content);
   }

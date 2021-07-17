@@ -1,16 +1,11 @@
-import { Feedback } from '../const';
+export default function renderMessage(isError) {
+  return (feedbackMessage, i18nextInstance, watchedState) => {
+    const { feedback } = watchedState;
 
-export default function renderMessage(
-  feedbackMessage,
-  i18nextInstance,
-  watchedState,
-) {
-  const isSUccessMessage = () => (watchedState.message === Feedback.SUCCESS_FETCH
-    ? 'm-2 mt-0 position-absolute small text-info'
-    : 'm-2 mt-0 position-absolute small text-warning');
-
-  feedbackMessage.setAttribute('class', `${isSUccessMessage()}`);
-
-  feedbackMessage.textContent = watchedState.message
-    && i18nextInstance.t(`form.feedback.${watchedState.message}`);
+    feedbackMessage.setAttribute(
+      'class',
+      `m-2 mt-0 position-absolute small text-${isError ? 'warning' : 'info'}`,
+    );
+    feedbackMessage.textContent = feedback && i18nextInstance.t(`feedback.${feedback}`);
+  };
 }

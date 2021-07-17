@@ -3,12 +3,12 @@ export default function renderModal(
   i18nextInstance,
   selectedPost,
 ) {
+  const { title, description, link } = selectedPost;
+
   const modalTitle = modalContainer.querySelector('.modal-title');
   const modalDescription = modalContainer.querySelector('.modal-body');
   const modalClose = modalContainer.querySelector('.btn-secondary');
   const modalContent = modalContainer.querySelector('.full-article');
-
-  const { title, description, link } = selectedPost;
 
   modalTitle.textContent = title;
   modalDescription.textContent = description;

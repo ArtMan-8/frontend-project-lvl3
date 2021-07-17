@@ -1,11 +1,11 @@
 import axios from 'axios';
-import { Feedback, FormProcessState, PROXY_URL } from '../const';
+import { feedback, formProcessState, PROXY_URL } from '../constants';
 import parseRssData from './parseRssData';
 
 const isValidRss = (rssData) => rssData.indexOf('xml version') !== -1;
 
 export default function fetchRSS(watchedState, rssUrl) {
-  watchedState.rssForm.processState = FormProcessState.SENDING;
+  watchedState.rssForm.processState = formProcessState.SENDING;
 
   return axios
     .get(`${PROXY_URL}/get`, {
@@ -15,19 +15,20 @@ export default function fetchRSS(watchedState, rssUrl) {
       if (isValidRss(data.contents)) {
         const rawData = parseRssData(data.contents);
 
-        watchedState.posts.set(rssUrl, rawData.posts);
-        watchedState.feeds.push({ url: rssUrl, ...rawData.feed });
-
-        watchedState.currentFeed = rssUrl;
-        watchedState.message = Feedback.SUCCESS_FETCH;
+        watchedState.posts.unshift(...rawData.posts);
+        watchedState.feeds.unshift({ url: rssUrl, ...rawData.feed });
+        watchedState.rssForm.error = false;
+        watchedState.feedback = feedback.SUCCESS_FETCH;
       } else {
-        watchedState.message = Feedback.NOT_RSS;
+        watchedState.rssForm.error = true;
+        watchedState.feedback = feedback.NOT_RSS;
       }
 
-      watchedState.rssForm.processState = FormProcessState.FINISHED;
+      watchedState.rssForm.processState = formProcessState.FINISHED;
     })
     .catch(() => {
-      watchedState.message = Feedback.NETWORK_ERROR;
-      watchedState.rssForm.processState = FormProcessState.FAILED;
+      watchedState.rssForm.error = true;
+      watchedState.rssForm.processState = formProcessState.FAILED;
+      watchedState.feedback = feedback.NETWORK_ERROR;
     });
 }

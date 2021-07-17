@@ -38,6 +38,6 @@ export default function renderUI(containers, i18nextInstance, watchedState) {
   submitButton.textContent = i18nextInstance.t('buttons.add');
   exampleMessage.textContent = i18nextInstance.t('form.example');
 
-  feedbackMessage.textContent = watchedState.message
-    && i18nextInstance.t(`form.feedback.${watchedState.message}`);
+  feedbackMessage.textContent = watchedState.feedback
+    && i18nextInstance.t(`feedback.${watchedState.feedback}`);
 }

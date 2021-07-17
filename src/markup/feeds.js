@@ -11,7 +11,7 @@ export default function feedsMarkup(feeds, i18nextInstance) {
         url,
         title,
         description,
-      }) => `<li class="list-group-item border-0 border-end-0" data-url="${url}" style="cursor: pointer">
+      }) => `<li class="list-group-item border-0 border-end-0" data-url="${url}">
         <h3 class="h6 m-0">${title}</h3>
         <p class="m-0 small text-black-50">
         ${description}
