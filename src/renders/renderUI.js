@@ -10,6 +10,8 @@ export default function renderUI(containers, i18nextInstance, watchedState) {
     feedbackMessage,
   } = containers;
 
+  const { error } = watchedState.rssForm;
+
   languageSelect.textContent = '';
   i18nextInstance.languages.sort().forEach((language, index) => {
     const input = document.createElement('input');
@@ -38,6 +40,6 @@ export default function renderUI(containers, i18nextInstance, watchedState) {
   submitButton.textContent = i18nextInstance.t('buttons.add');
   exampleMessage.textContent = i18nextInstance.t('form.example');
 
-  feedbackMessage.textContent = watchedState.feedback
-    && i18nextInstance.t(`feedback.${watchedState.feedback}`);
+  feedbackMessage.textContent = feedbackMessage.textContent
+    && i18nextInstance.t(error ? `errors.${error}` : 'success');
 }

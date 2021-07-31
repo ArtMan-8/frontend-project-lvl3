@@ -1,14 +1,15 @@
 import onChange from 'on-change';
-import { feedback } from '../constants';
-import renderContent from '../renders/renderContent';
+import { formProcessState } from '../constants';
 import renderFeeds from '../renders/renderFeeds';
 import renderMessage from '../renders/renderMessage';
 import renderPosts from '../renders/renderPosts';
 import renderUI from '../renders/renderUI';
+import renderContent from '../renders/renderContent';
 import processWatcher from './processWatcher';
+import renderModal from '../renders/renderModal';
 
-const isFetchSuccess = (watchedState) => watchedState.feedback === feedback.SUCCESS_FETCH;
-const isError = (watchedState) => watchedState.rssForm.error;
+const isFetchFinished = (watchedState) => watchedState.rssForm.processState === formProcessState.FINISHED;
+const isError = (watchedState) => !!watchedState.rssForm.error;
 
 export default function mainWatcher(state, i18nextInstance, containers) {
   const watchedState = onChange(state, (key, value) => {
@@ -24,33 +25,39 @@ export default function mainWatcher(state, i18nextInstance, containers) {
         renderPosts(containers.postsContainer, i18nextInstance, watchedState);
         break;
 
+      case 'ui.selectedPost':
+        renderModal(containers.modalContainer, i18nextInstance, value);
+        break;
+
       case 'feeds':
         renderFeeds(containers.feedsContainer, i18nextInstance, watchedState);
         break;
 
       case 'posts':
         renderPosts(containers.postsContainer, i18nextInstance, watchedState);
-        break;
-
-      case 'feedback':
-        if (isFetchSuccess(watchedState)) {
-          containers.formInput.value = '';
-        }
-
-        renderMessage(isError(watchedState))(
-          containers.feedbackMessage,
-          i18nextInstance,
-          watchedState,
-        );
+        containers.formInput.value = '';
         break;
 
       case 'rssForm.url':
         break;
 
       case 'rssForm.error':
+        renderMessage(
+          containers.feedbackMessage,
+          i18nextInstance,
+          watchedState,
+        );
         break;
 
       case 'rssForm.processState':
+        if (isFetchFinished(watchedState)) {
+          renderMessage(
+            containers.feedbackMessage,
+            i18nextInstance,
+            watchedState,
+          );
+        }
+
         processWatcher(containers, watchedState);
         break;
 

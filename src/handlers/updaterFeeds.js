@@ -1,20 +1,16 @@
 import _ from 'lodash';
-import axios from 'axios';
 import parseRssData from './parseRssData';
-import { DELAY_UPDATE, PROXY_URL } from '../constants';
+import { DELAY_UPDATE } from '../constants';
+import { getRss } from './fetchRSS';
 
 function updaterFeeds(watchedState) {
-  const requests = watchedState.feeds.map((feed) => axios
-    .get(`${PROXY_URL}/get`, {
-      params: { url: feed.url, disableCache: true },
-    })
-    .then(({ data }) => {
-      const rawData = parseRssData(data.contents);
-      const posts = watchedState.posts.get(feed.url);
+  const requests = watchedState.feeds.map((feed) => getRss(feed.url).then((contents) => {
+    const rawData = parseRssData(contents);
+    const posts = watchedState.posts.get(feed.url);
 
-      const newPosts = _.differenceBy(rawData.posts, posts, 'title');
-      watchedState.posts.set(feed.url, posts.concat(newPosts));
-    }));
+    const newPosts = _.differenceBy(rawData.posts, posts, 'title');
+    watchedState.posts.set(feed.url, posts.concat(newPosts));
+  }));
 
   return Promise.all(requests);
 }

@@ -1,11 +1,15 @@
-export default function renderMessage(isError) {
-  return (feedbackMessage, i18nextInstance, watchedState) => {
-    const { feedback } = watchedState;
+export default function renderMessage(
+  messageContainer,
+  i18nextInstance,
+  watchedState,
+) {
+  const { error } = watchedState.rssForm;
 
-    feedbackMessage.setAttribute(
-      'class',
-      `m-2 mt-0 position-absolute small text-${isError ? 'warning' : 'info'}`,
-    );
-    feedbackMessage.textContent = feedback && i18nextInstance.t(`feedback.${feedback}`);
-  };
+  messageContainer.setAttribute(
+    'class',
+    `m-2 mt-0 position-absolute small text-${error ? 'warning' : 'info'}`,
+  );
+  messageContainer.textContent = i18nextInstance.t(
+    error ? `errors.${error}` : 'success',
+  );
 }

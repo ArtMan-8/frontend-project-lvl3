@@ -12,13 +12,13 @@ export default {
       readAll: 'Читать полностью',
       close: 'Закрыть',
     },
-    feedback: {
+    errors: {
       notRss: 'Ресурс не содержит валидный RSS',
       invalidRss: 'Ссылка должна быть валидным URL',
-      successFetch: 'RSS успешно загружен',
       isExistFeed: 'RSS уже существует',
       networkError: 'Ошибка сети',
     },
+    success: 'RSS успешно загружен',
     form: {
       placeholder: 'Ссылка RSS',
       example: 'Пример: https://ru.hexlet.io/lessons.rss',

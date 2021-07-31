@@ -4,7 +4,7 @@ import '@testing-library/jest-dom';
 import { screen } from '@testing-library/dom';
 import i18next from 'i18next';
 import app from '../src/app';
-import { DEFAULT_LANGUAGE, feedback } from '../src/constants';
+import { DEFAULT_LANGUAGE, message } from '../src/constants';
 import resources from '../src/locales';
 import renderContent from '../src/renders/renderContent';
 import renderMessage from '../src/renders/renderMessage';
@@ -38,43 +38,96 @@ describe('Test renders', () => {
     });
 
     interact.selectedPost = {
-      title: 'Lorem ipsum 2021-07-17T08:49:00Z',
-      description: 'Irure in ullamco consectetur laboris nulla.',
-      link: 'http://example.com/test/1626511740',
+      id: '2',
+      feedId: '1',
+      title: 'Lorem ipsum 2021-07-31T16:25:00Z',
+      description: 'Consequat Lorem do non proident elit exercitation reprehenderit excepteur ut proident aliquip veniam dolore esse.',
+      link: 'http://example.com/test/1627748700',
     };
 
     interact.watchedState = {
       feeds: [
         {
-          url: 'http://lorem-rss.herokuapp.com/feed',
-          title:
-            'Lorem ipsum feed for an interval of 1 minutes with 10 item(s)',
+          id: '1',
+          title: 'Lorem ipsum feed for an interval of 1 minutes with 10 item(s)',
           description: 'This is a constantly updating lorem ipsum feed',
         },
       ],
       ui: {
-        watchedPosts: new Set().add('Lorem ipsum 2021-07-07T08:35:00Z'),
+        watchedPosts: new Set().add('2'),
       },
-      posts: [{
-        title: 'Lorem ipsum 2021-07-17T08:49:00Z',
-        description: 'Irure in ullamco consectetur laboris nulla.',
-        link: 'http://example.com/test/1626511740',
-      },
-      {
-        title: 'Lorem ipsum 2021-07-17T08:48:00Z',
-        description: 'Ullamco exercitation adipisicing labore exercitation officia non.',
-        link: 'http://example.com/test/1626511680',
-      },
-      {
-        title: 'Lorem ipsum 2021-07-17T08:47:00Z',
-        description: 'Commodo enim irure do sunt commodo.',
-        link: 'http://example.com/test/1626511620',
-      },
-      {
-        title: 'Lorem ipsum 2021-07-17T08:46:00Z',
-        description: 'Non voluptate aliqua qui voluptate sunt sunt sint minim pariatur deserunt.',
-        link: 'http://example.com/test/1626511560',
-      }],
+      posts: [
+        {
+          id: '2',
+          feedId: '1',
+          title: 'Lorem ipsum 2021-07-31T16:25:00Z',
+          description: 'Consequat Lorem do non proident elit exercitation reprehenderit excepteur ut proident aliquip veniam dolore esse.',
+          link: 'http://example.com/test/1627748700',
+        },
+        {
+          id: '3',
+          feedId: '1',
+          title: 'Lorem ipsum 2021-07-31T16:24:00Z',
+          description: 'Culpa duis elit fugiat adipisicing culpa consectetur ut ad sint consequat.',
+          link: 'http://example.com/test/1627748640',
+        },
+        {
+          id: '4',
+          feedId: '1',
+          title: 'Lorem ipsum 2021-07-31T16:23:00Z',
+          description: 'Lorem mollit do officia laboris do.',
+          link: 'http://example.com/test/1627748580',
+        },
+        {
+          id: '5',
+          feedId: '1',
+          title: 'Lorem ipsum 2021-07-31T16:22:00Z',
+          description: 'Aute aliqua consectetur eu ad id nisi minim enim mollit veniam.',
+          link: 'http://example.com/test/1627748520',
+        },
+        {
+          id: '6',
+          feedId: '1',
+          title: 'Lorem ipsum 2021-07-31T16:21:00Z',
+          description: 'Deserunt laborum laboris commodo Lorem duis sint sunt magna dolore cillum nostrud consectetur anim in.',
+          link: 'http://example.com/test/1627748460',
+        },
+        {
+          id: '7',
+          feedId: '1',
+          title: 'Lorem ipsum 2021-07-31T16:20:00Z',
+          description: 'Do dolore dolor do ut anim.',
+          link: 'http://example.com/test/1627748400',
+        },
+        {
+          id: '8',
+          feedId: '1',
+          title: 'Lorem ipsum 2021-07-31T16:19:00Z',
+          description: 'Consequat amet cupidatat fugiat est laborum elit.',
+          link: 'http://example.com/test/1627748340',
+        },
+        {
+          id: '9',
+          feedId: '1',
+          title: 'Lorem ipsum 2021-07-31T16:18:00Z',
+          description: 'Duis duis amet aute ad dolore incididunt occaecat occaecat cupidatat proident adipisicing.',
+          link: 'http://example.com/test/1627748280',
+        },
+        {
+          id: '10',
+          feedId: '1',
+          title: 'Lorem ipsum 2021-07-31T16:17:00Z',
+          description: 'Pariatur velit tempor dolor nulla dolore ullamco excepteur pariatur quis reprehenderit anim aliquip.',
+          link: 'http://example.com/test/1627748220',
+        },
+        {
+          id: '11',
+          feedId: '1',
+          title: 'Lorem ipsum 2021-07-31T16:16:00Z',
+          description: 'In irure duis veniam sint.',
+          link: 'http://example.com/test/1627748160',
+        },
+      ],
     };
 
     await app();
@@ -107,7 +160,7 @@ describe('Test renders', () => {
   test('no content', async () => {
     interact.watchedState = {
       feeds: [],
-      posts: new Map(),
+      posts: [],
     };
 
     renderContent(
@@ -135,10 +188,11 @@ describe('Test renders', () => {
   });
 
   test('success feedback', async () => {
-    const isError = false;
-    interact.watchedState.feedback = feedback.SUCCESS_FETCH;
+    interact.watchedState.rssForm = {
+      error: null,
+    };
 
-    renderMessage(isError)(
+    renderMessage(
       interact.feedbackr,
       interact.i18nextInstance,
       interact.watchedState,
@@ -150,10 +204,11 @@ describe('Test renders', () => {
   });
 
   test('error feedback', async () => {
-    const isError = true;
-    interact.watchedState.feedback = feedback.NETWORK_ERROR;
+    interact.watchedState.rssForm = {
+      error: message.NETWORK_ERROR,
+    };
 
-    renderMessage(isError)(
+    renderMessage(
       interact.feedbackr,
       interact.i18nextInstance,
       interact.watchedState,

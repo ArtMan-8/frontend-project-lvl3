@@ -1,25 +1,24 @@
 import * as yup from 'yup';
-import { feedback } from '../constants';
-import renderModal from '../renders/renderModal';
+import { message } from '../constants';
 import fetchRSS from './fetchRSS';
 
-const isValidUrl = (url) => {
-  const schema = yup.string().required().url();
-  return schema.isValid(url);
-};
+const isValidUrl = (url, feeds) => {
+  const isExistUrl = feeds.map((feed) => feed.url);
+  const schema = yup
+    .string()
+    .required()
+    .url(message.INVALID_RSS)
+    .notOneOf(isExistUrl, message.IS_EXIST_FEED);
 
-const isExistUrl = (data, url) => data.map((feed) => feed.url).includes(url);
+  return schema.validate(url);
+};
 
 const isLinkPressed = (event) => event.target.tagName === 'A';
 const isButtonPreviewPressed = (event) => event.target.tagName === 'BUTTON';
 
-export default function addUIHandlers(
-  containers,
-  i18nextInstance,
-  watchedState,
-) {
+export default function addUIHandlers(containers, watchedState) {
   const {
-    formInput, rssForm, languageSelect, postsContainer, modalContainer,
+    formInput, rssForm, languageSelect, postsContainer,
   } = containers;
 
   languageSelect.addEventListener('click', (event) => {
@@ -34,36 +33,30 @@ export default function addUIHandlers(
     const formData = new FormData(event.target);
     const url = formData.get('url').trim();
 
-    isValidUrl(url).then((isValid) => {
-      if (isValid) {
-        if (isExistUrl(watchedState.feeds, url)) {
-          watchedState.rssForm.error = true;
-          watchedState.feedback = feedback.IS_EXIST_FEED;
-          return;
-        }
-
+    isValidUrl(url, watchedState.feeds)
+      .then((rssUrl) => {
         formInput.classList.remove('is-invalid');
-        fetchRSS(watchedState, url);
-        return;
-      }
-
-      formInput.classList.add('is-invalid');
-      watchedState.rssForm.error = true;
-      watchedState.feedback = feedback.INVALID_RSS;
-    });
+        fetchRSS(watchedState, rssUrl);
+      })
+      .catch((error) => {
+        formInput.classList.add('is-invalid');
+        watchedState.rssForm.error = error.message;
+      });
   });
 
   postsContainer.addEventListener('click', (event) => {
     const post = event.target.closest('.list-group-item');
-    const postTitle = post.dataset.title;
+    const getTargetPost = () => {
+      const postId = post.dataset.id;
+      return watchedState.posts.find(({ id }) => id === postId);
+    };
 
     if (isLinkPressed(event) || isButtonPreviewPressed(event)) {
-      const selectedPost = watchedState.posts.find(
-        ({ title }) => title === postTitle,
-      );
+      watchedState.ui.watchedPosts.add(getTargetPost().id);
+    }
 
-      watchedState.ui.watchedPosts.add(selectedPost.title);
-      renderModal(modalContainer, i18nextInstance, selectedPost);
+    if (isButtonPreviewPressed(event)) {
+      watchedState.ui.selectedPost = getTargetPost();
     }
   });
 }

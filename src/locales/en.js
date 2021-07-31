@@ -12,13 +12,13 @@ export default {
       readAll: 'Read post',
       close: 'Close',
     },
-    feedback: {
+    errors: {
       notRss: 'Resource does not contain valid RSS',
       invalidRss: 'The link must be a valid URL',
-      successFetch: 'RSS loaded successfully',
       isExistFeed: 'RSS is exist',
       networkError: 'Network error',
     },
+    success: 'RSS loaded successfully',
     form: {
       placeholder: 'RSS link',
       example: 'Example: https://ru.hexlet.io/lessons.rss',
