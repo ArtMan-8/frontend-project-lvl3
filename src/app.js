@@ -7,50 +7,54 @@ import postsRefetch from './handlers/updaterFeeds';
 import resources from './locales';
 import { DEFAULT_LANGUAGE, formProcessState } from './constants';
 
-export default function app() {
+function init() {
   const i18nextInstance = i18next.createInstance();
-  i18nextInstance
+  return i18nextInstance
     .init({
       lng: DEFAULT_LANGUAGE,
       fallbackLng: Object.keys(resources),
       resources,
     })
-    .then(() => {
-      const state = {
-        ui: {
-          selectedPost: {},
-          watchedPosts: new Set(),
-          language: DEFAULT_LANGUAGE,
-        },
-        feeds: [],
-        posts: [],
-        rssForm: {
-          url: '',
-          isValid: true,
-          error: null,
-          processState: formProcessState.FILLING,
-        },
-      };
+    .then(() => i18nextInstance);
+}
 
-      const containers = {
-        title: document.querySelector('#title'),
-        subTitle: document.querySelector('#subTitle'),
-        languageSelect: document.querySelector('#languageSelect'),
-        rssForm: document.querySelector('#rss'),
-        formInput: document.querySelector('#rss input'),
-        formLabel: document.querySelector('#rss label'),
-        submitButton: document.querySelector('#rss button'),
-        exampleMessage: document.querySelector('#example'),
-        feedbackMessage: document.querySelector('#feedback'),
-        feedsContainer: document.querySelector('#feeds'),
-        postsContainer: document.querySelector('#posts'),
-        modalContainer: document.querySelector('#modal'),
-      };
+export default function app() {
+  init().then((i18nextInstance) => {
+    const state = {
+      ui: {
+        selectedPost: {},
+        watchedPosts: new Set(),
+        language: DEFAULT_LANGUAGE,
+      },
+      feeds: [],
+      posts: [],
+      rssForm: {
+        url: '',
+        isValid: true,
+        error: null,
+        processState: formProcessState.FILLING,
+      },
+    };
 
-      const watchedState = mainWatcher(state, i18nextInstance, containers);
+    const containers = {
+      title: document.querySelector('#title'),
+      subTitle: document.querySelector('#subTitle'),
+      languageSelect: document.querySelector('#languageSelect'),
+      rssForm: document.querySelector('#rss'),
+      formInput: document.querySelector('#rss input'),
+      formLabel: document.querySelector('#rss label'),
+      submitButton: document.querySelector('#rss button'),
+      exampleMessage: document.querySelector('#example'),
+      feedbackMessage: document.querySelector('#feedback'),
+      feedsContainer: document.querySelector('#feeds'),
+      postsContainer: document.querySelector('#posts'),
+      modalContainer: document.querySelector('#modal'),
+    };
 
-      renderUI(containers, i18nextInstance, watchedState);
-      addUIHandlers(containers, watchedState);
-      postsRefetch(watchedState);
-    });
+    const watchedState = mainWatcher(state, i18nextInstance, containers);
+
+    renderUI(containers, i18nextInstance, watchedState);
+    addUIHandlers(containers, watchedState);
+    postsRefetch(watchedState);
+  });
 }

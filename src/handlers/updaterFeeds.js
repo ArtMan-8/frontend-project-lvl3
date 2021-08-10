@@ -6,21 +6,19 @@ import { getRss } from './fetchRSS';
 function updaterFeeds(watchedState) {
   const requests = watchedState.feeds.map((feed) => getRss(feed.url).then((contents) => {
     const rawData = parseRssData(contents);
-    const posts = watchedState.posts.get(feed.url);
+    const posts = watchedState.posts.filter(
+      ({ feedId }) => feedId === feed.id,
+    );
 
     const newPosts = _.differenceBy(rawData.posts, posts, 'title');
-    watchedState.posts.set(feed.url, posts.concat(newPosts));
+    watchedState.posts.unshift(...newPosts);
   }));
 
   return Promise.all(requests);
 }
 
 export default function postsRefetch(watchedState, delay = DELAY_UPDATE) {
-  updaterFeeds(watchedState)
-    .then(() => {
-      setTimeout(() => postsRefetch(watchedState), delay);
-    })
-    .catch(() => {
-      setTimeout(() => postsRefetch(watchedState), delay * 2);
-    });
+  updaterFeeds(watchedState).finally(() => {
+    setTimeout(() => postsRefetch(watchedState), delay);
+  });
 }
