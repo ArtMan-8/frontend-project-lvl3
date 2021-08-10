@@ -8,8 +8,7 @@ import renderContent from '../renders/renderContent';
 import processWatcher from './processWatcher';
 import renderModal from '../renders/renderModal';
 
-const isFetchFinished = (watchedState) => watchedState.rssForm.processState === formProcessState.FINISHED;
-const isError = (watchedState) => !!watchedState.rssForm.error;
+const isFetchFinished = ({ rssForm }) => rssForm.processState === formProcessState.FINISHED;
 
 export default function mainWatcher(state, i18nextInstance, containers) {
   const watchedState = onChange(state, (key, value) => {

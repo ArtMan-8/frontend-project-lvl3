@@ -7,9 +7,9 @@ import postsRefetch from './handlers/updaterFeeds';
 import resources from './locales';
 import { DEFAULT_LANGUAGE, formProcessState } from './constants';
 
-export default function app() {
+function init() {
   const i18nextInstance = i18next.createInstance();
-  i18nextInstance
+  return i18nextInstance
     .init({
       lng: DEFAULT_LANGUAGE,
       fallbackLng: Object.keys(resources),
@@ -47,10 +47,16 @@ export default function app() {
         modalContainer: document.querySelector('#modal'),
       };
 
-      const watchedState = mainWatcher(state, i18nextInstance, containers);
-
-      renderUI(containers, i18nextInstance, watchedState);
-      addUIHandlers(containers, watchedState);
-      postsRefetch(watchedState);
+      return { state, i18nextInstance, containers };
     });
+}
+
+export default function app() {
+  init().then(({ state, i18nextInstance, containers }) => {
+    const watchedState = mainWatcher(state, i18nextInstance, containers);
+
+    renderUI(containers, i18nextInstance, watchedState);
+    addUIHandlers(containers, watchedState);
+    postsRefetch(watchedState);
+  });
 }
