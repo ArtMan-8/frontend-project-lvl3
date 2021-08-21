@@ -62,8 +62,8 @@ describe('Test RSS App', () => {
   });
 
   test('Resource does not contain valid RSS', async () => {
-    initNock(`${rssUrl}/notRss`, notRssResponse);
-    userEvent.type(interact.rssInput, `${rssUrl}/notRss`);
+    initNock(`${rssUrl}/invalidRss`, notRssResponse);
+    userEvent.type(interact.rssInput, `${rssUrl}/invalidRss`);
     userEvent.click(interact.submitButton);
 
     expect(

@@ -1,7 +1,7 @@
 {
-  "contents": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n<title>Error</title>\n</head>\n<body>\n<pre>Cannot GET /notRss</pre>\n</body>\n</html>\n",
+  "contents": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n<title>Error</title>\n</head>\n<body>\n<pre>Cannot GET /invalidRss</pre>\n</body>\n</html>\n",
   "status": {
-    "url": "http://lorem-rss.herokuapp.com/notRss",
+    "url": "http://lorem-rss.herokuapp.com/invalidRss",
     "http_code": 404,
     "content_type": "text/html; charset=utf-8",
     "content_length": 145,

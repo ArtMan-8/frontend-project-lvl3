@@ -37,15 +37,11 @@ describe('Test renders', () => {
       resources,
     });
 
-    interact.selectedPost = {
-      id: '2',
-      feedId: '1',
-      title: 'Lorem ipsum 2021-07-31T16:25:00Z',
-      description: 'Consequat Lorem do non proident elit exercitation reprehenderit excepteur ut proident aliquip veniam dolore esse.',
-      link: 'http://example.com/test/1627748700',
-    };
-
     interact.watchedState = {
+      ui: {
+        selectedPost: '2',
+        watchedPosts: new Set().add('2'),
+      },
       feeds: [
         {
           id: '1',
@@ -53,79 +49,76 @@ describe('Test renders', () => {
           description: 'This is a constantly updating lorem ipsum feed',
         },
       ],
-      ui: {
-        watchedPosts: new Set().add('2'),
-      },
       posts: [
         {
           id: '2',
           feedId: '1',
-          title: 'Lorem ipsum 2021-07-31T16:25:00Z',
-          description: 'Consequat Lorem do non proident elit exercitation reprehenderit excepteur ut proident aliquip veniam dolore esse.',
-          link: 'http://example.com/test/1627748700',
+          title: 'Lorem ipsum 2021-08-21T08:57:00Z',
+          description: 'Amet incididunt duis consectetur occaecat occaecat pariatur duis aute veniam elit.',
+          link: 'http://example.com/test/1629536220',
         },
         {
           id: '3',
           feedId: '1',
-          title: 'Lorem ipsum 2021-07-31T16:24:00Z',
-          description: 'Culpa duis elit fugiat adipisicing culpa consectetur ut ad sint consequat.',
-          link: 'http://example.com/test/1627748640',
+          title: 'Lorem ipsum 2021-08-21T08:56:00Z',
+          description: 'Culpa officia consequat ut excepteur occaecat est reprehenderit tempor voluptate tempor consequat.',
+          link: 'http://example.com/test/1629536160',
         },
         {
           id: '4',
           feedId: '1',
-          title: 'Lorem ipsum 2021-07-31T16:23:00Z',
-          description: 'Lorem mollit do officia laboris do.',
-          link: 'http://example.com/test/1627748580',
+          title: 'Lorem ipsum 2021-08-21T08:55:00Z',
+          description: 'Occaecat magna velit incididunt incididunt ea sunt tempor qui laboris nostrud adipisicing fugiat sint.',
+          link: 'http://example.com/test/1629536100',
         },
         {
           id: '5',
           feedId: '1',
-          title: 'Lorem ipsum 2021-07-31T16:22:00Z',
-          description: 'Aute aliqua consectetur eu ad id nisi minim enim mollit veniam.',
-          link: 'http://example.com/test/1627748520',
+          title: 'Lorem ipsum 2021-08-21T08:54:00Z',
+          description: 'Dolor enim eiusmod irure Lorem nostrud ut nisi.',
+          link: 'http://example.com/test/1629536040',
         },
         {
           id: '6',
           feedId: '1',
-          title: 'Lorem ipsum 2021-07-31T16:21:00Z',
-          description: 'Deserunt laborum laboris commodo Lorem duis sint sunt magna dolore cillum nostrud consectetur anim in.',
-          link: 'http://example.com/test/1627748460',
+          title: 'Lorem ipsum 2021-08-21T08:53:00Z',
+          description: 'Non mollit fugiat exercitation ullamco incididunt mollit nulla do minim duis.',
+          link: 'http://example.com/test/1629535980',
         },
         {
           id: '7',
           feedId: '1',
-          title: 'Lorem ipsum 2021-07-31T16:20:00Z',
-          description: 'Do dolore dolor do ut anim.',
-          link: 'http://example.com/test/1627748400',
+          title: 'Lorem ipsum 2021-08-21T08:52:00Z',
+          description: 'Est laborum occaecat commodo irure magna amet nulla eiusmod cillum pariatur excepteur et.',
+          link: 'http://example.com/test/1629535920',
         },
         {
           id: '8',
           feedId: '1',
-          title: 'Lorem ipsum 2021-07-31T16:19:00Z',
-          description: 'Consequat amet cupidatat fugiat est laborum elit.',
-          link: 'http://example.com/test/1627748340',
+          title: 'Lorem ipsum 2021-08-21T08:51:00Z',
+          description: 'Ea fugiat anim dolor laboris laboris voluptate veniam elit sunt ipsum.',
+          link: 'http://example.com/test/1629535860',
         },
         {
           id: '9',
           feedId: '1',
-          title: 'Lorem ipsum 2021-07-31T16:18:00Z',
-          description: 'Duis duis amet aute ad dolore incididunt occaecat occaecat cupidatat proident adipisicing.',
-          link: 'http://example.com/test/1627748280',
+          title: 'Lorem ipsum 2021-08-21T08:50:00Z',
+          description: 'Aute eu ipsum laboris laboris culpa voluptate consequat non excepteur excepteur sit.',
+          link: 'http://example.com/test/1629535800',
         },
         {
           id: '10',
           feedId: '1',
-          title: 'Lorem ipsum 2021-07-31T16:17:00Z',
-          description: 'Pariatur velit tempor dolor nulla dolore ullamco excepteur pariatur quis reprehenderit anim aliquip.',
-          link: 'http://example.com/test/1627748220',
+          title: 'Lorem ipsum 2021-08-21T08:49:00Z',
+          description: 'Veniam adipisicing mollit esse in est.',
+          link: 'http://example.com/test/1629535740',
         },
         {
           id: '11',
           feedId: '1',
-          title: 'Lorem ipsum 2021-07-31T16:16:00Z',
-          description: 'In irure duis veniam sint.',
-          link: 'http://example.com/test/1627748160',
+          title: 'Lorem ipsum 2021-08-21T08:48:00Z',
+          description: 'Minim veniam dolore duis duis nulla sit laboris elit.',
+          link: 'http://example.com/test/1629535680',
         },
       ],
     };
@@ -180,11 +173,14 @@ describe('Test renders', () => {
     renderModal(
       interact.modalContainer,
       interact.i18nextInstance,
-      interact.selectedPost,
+      interact.watchedState,
     );
 
-    expect(await screen.findByText(interact.selectedPost.title)).toBeInTheDocument();
-    expect(await screen.findByText(interact.selectedPost.description)).toBeInTheDocument();
+    const { title, description } = interact.watchedState.posts
+      .find(({ id }) => id === interact.watchedState.ui.selectedPost);
+
+    expect(await screen.findByText(title)).toBeInTheDocument();
+    expect(await screen.findByText(description)).toBeInTheDocument();
   });
 
   test('success feedback', async () => {

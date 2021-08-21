@@ -1,9 +1,15 @@
 export default function renderModal(
   modalContainer,
   i18nextInstance,
-  selectedPost,
+  watchedState,
 ) {
-  const { title, description, link } = selectedPost;
+  const {
+    ui: { selectedPost },
+    posts,
+  } = watchedState;
+  const { title, description, link } = posts.find(
+    ({ id }) => id === selectedPost,
+  );
 
   const modalTitle = modalContainer.querySelector('.modal-title');
   const modalDescription = modalContainer.querySelector('.modal-body');

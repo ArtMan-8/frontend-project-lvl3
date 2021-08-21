@@ -19,11 +19,11 @@ const createPostsItem = (id, link, title, watched, i18nextInstance) => {
     'class',
     'list-group-item d-flex justify-content-between align-items-start border-0 border-end-0',
   );
-  li.setAttribute('data-id', id);
 
   const a = document.createElement('a');
   a.setAttribute('class', `${watched ? 'fw-normal' : 'fw-bold'}`);
   a.setAttribute('href', link);
+  a.setAttribute('data-id', id);
   a.setAttribute('target', '_blank');
   a.setAttribute('rel', 'noopener noreferrer');
   a.textContent = title;
@@ -31,6 +31,7 @@ const createPostsItem = (id, link, title, watched, i18nextInstance) => {
   const button = document.createElement('button');
   button.setAttribute('type', 'button');
   button.setAttribute('class', 'btn btn-outline-primary btn-sm');
+  button.setAttribute('data-id', id);
   button.setAttribute('data-bs-toggle', 'modal');
   button.setAttribute('data-bs-target', '#modal');
   button.textContent = `${i18nextInstance.t('buttons.view')}`;

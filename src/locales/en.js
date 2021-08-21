@@ -13,9 +13,9 @@ export default {
       close: 'Close',
     },
     errors: {
-      notRss: 'Resource does not contain valid RSS',
-      invalidRss: 'The link must be a valid URL',
-      isExistFeed: 'RSS is exist',
+      invalidRss: 'Resource does not contain valid RSS',
+      invalidUrl: 'The link must be a valid URL',
+      feedExists: 'RSS is exist',
       networkError: 'Network error',
     },
     success: 'RSS loaded successfully',

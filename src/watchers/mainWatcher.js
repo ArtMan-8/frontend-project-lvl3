@@ -8,8 +8,6 @@ import renderContent from '../renders/renderContent';
 import processWatcher from './processWatcher';
 import renderModal from '../renders/renderModal';
 
-const isFetchFinished = ({ rssForm }) => rssForm.processState === formProcessState.FINISHED;
-
 export default function mainWatcher(state, i18nextInstance, containers) {
   const watchedState = onChange(state, (key, value) => {
     switch (key) {
@@ -25,7 +23,7 @@ export default function mainWatcher(state, i18nextInstance, containers) {
         break;
 
       case 'ui.selectedPost':
-        renderModal(containers.modalContainer, i18nextInstance, value);
+        renderModal(containers.modalContainer, i18nextInstance, watchedState);
         break;
 
       case 'feeds':
@@ -37,10 +35,13 @@ export default function mainWatcher(state, i18nextInstance, containers) {
         containers.formInput.value = '';
         break;
 
-      case 'rssForm.url':
-        break;
-
       case 'rssForm.error':
+        if (value) {
+          containers.formInput.classList.add('is-invalid');
+        } else {
+          containers.formInput.classList.remove('is-invalid');
+        }
+
         renderMessage(
           containers.feedbackMessage,
           i18nextInstance,
@@ -49,7 +50,7 @@ export default function mainWatcher(state, i18nextInstance, containers) {
         break;
 
       case 'rssForm.processState':
-        if (isFetchFinished(watchedState)) {
+        if (containers.rssForm.processState === formProcessState.FINISHED) {
           renderMessage(
             containers.feedbackMessage,
             i18nextInstance,

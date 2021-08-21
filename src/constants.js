@@ -1,12 +1,12 @@
 export const DEFAULT_LANGUAGE = 'ru';
-export const DELAY_UPDATE = 5000;
+export const FETCHING_TIMEOUT = 5000;
 export const PROXY_URL = 'https://hexlet-allorigins.herokuapp.com';
 
 export const message = {
-  NOT_RSS: 'notRss',
   INVALID_RSS: 'invalidRss',
-  SUCCESS_ADD: 'success',
-  IS_EXIST_FEED: 'isExistFeed',
+  INVALID_URL: 'invalidUrl',
+  SUCCESS: 'success',
+  FEED_EXISTS: 'feedExists',
   NETWORK_ERROR: 'networkError',
 };
 

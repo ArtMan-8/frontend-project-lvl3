@@ -1,31 +1,28 @@
 import * as yup from 'yup';
+import { fetchRSS } from './handlers';
 import { message } from '../constants';
-import fetchRSS from './fetchRSS';
 
-const isValidUrl = (url, feeds) => {
-  const isExistUrl = feeds.map((feed) => feed.url);
+const validate = (url, feeds) => {
+  const existsUrls = feeds.map((feed) => feed.url);
   const schema = yup
     .string()
     .required()
-    .url(message.INVALID_RSS)
-    .notOneOf(isExistUrl, message.IS_EXIST_FEED);
+    .url(message.INVALID_URL)
+    .notOneOf(existsUrls, message.FEED_EXISTS);
 
   return schema.validate(url);
 };
 
-const isLinkPressed = (event) => event.target.tagName === 'A';
-const isButtonPreviewPressed = (event) => event.target.tagName === 'BUTTON';
-
 export default function addUIHandlers(containers, watchedState) {
-  const {
-    formInput, rssForm, languageSelect, postsContainer,
-  } = containers;
+  const { rssForm, languageSelect, postsContainer } = containers;
 
   languageSelect.addEventListener('click', (event) => {
-    if (event.target.nodeName === 'INPUT') {
-      const { language } = event.target.dataset;
-      watchedState.ui.language = language;
+    if (!event.target.dataset.language) {
+      return;
     }
+
+    const { language } = event.target.dataset;
+    watchedState.ui.language = language;
   });
 
   rssForm.addEventListener('submit', (event) => {
@@ -33,30 +30,21 @@ export default function addUIHandlers(containers, watchedState) {
     const formData = new FormData(event.target);
     const url = formData.get('url').trim();
 
-    isValidUrl(url, watchedState.feeds)
+    validate(url, watchedState.feeds)
       .then((rssUrl) => {
-        formInput.classList.remove('is-invalid');
         fetchRSS(watchedState, rssUrl);
       })
       .catch((error) => {
-        formInput.classList.add('is-invalid');
         watchedState.rssForm.error = error.message;
       });
   });
 
   postsContainer.addEventListener('click', (event) => {
-    const post = event.target.closest('.list-group-item');
-    const getTargetPost = () => {
-      const postId = post.dataset.id;
-      return watchedState.posts.find(({ id }) => id === postId);
-    };
-
-    if (isLinkPressed(event) || isButtonPreviewPressed(event)) {
-      watchedState.ui.watchedPosts.add(getTargetPost().id);
+    if (!event.target.dataset.id) {
+      return;
     }
 
-    if (isButtonPreviewPressed(event)) {
-      watchedState.ui.selectedPost = getTargetPost();
-    }
+    watchedState.ui.watchedPosts.add(event.target.dataset.id);
+    watchedState.ui.selectedPost = event.target.dataset.id;
   });
 }

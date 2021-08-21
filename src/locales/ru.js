@@ -13,9 +13,9 @@ export default {
       close: 'Закрыть',
     },
     errors: {
-      notRss: 'Ресурс не содержит валидный RSS',
-      invalidRss: 'Ссылка должна быть валидным URL',
-      isExistFeed: 'RSS уже существует',
+      invalidRss: 'Ресурс не содержит валидный RSS',
+      invalidUrl: 'Ссылка должна быть валидным URL',
+      feedExists: 'RSS уже существует',
       networkError: 'Ошибка сети',
     },
     success: 'RSS успешно загружен',
