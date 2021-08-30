@@ -35,13 +35,16 @@ export default function mainWatcher(state, i18nextInstance, containers) {
         containers.formInput.value = '';
         break;
 
-      case 'rssForm.error':
+      case 'rssForm.isValid':
         if (value) {
-          containers.formInput.classList.add('is-invalid');
-        } else {
           containers.formInput.classList.remove('is-invalid');
+        } else {
+          containers.formInput.classList.add('is-invalid');
         }
 
+        break;
+
+      case 'rssForm.error':
         renderMessage(
           containers.feedbackMessage,
           i18nextInstance,
@@ -50,7 +53,7 @@ export default function mainWatcher(state, i18nextInstance, containers) {
         break;
 
       case 'rssForm.processState':
-        if (containers.rssForm.processState === formProcessState.FINISHED) {
+        if (value === formProcessState.FINISHED) {
           renderMessage(
             containers.feedbackMessage,
             i18nextInstance,

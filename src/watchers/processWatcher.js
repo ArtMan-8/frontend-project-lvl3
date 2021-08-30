@@ -4,7 +4,6 @@ export default function processWatcher(containers, watchedState) {
   const { formInput, submitButton } = containers;
   switch (watchedState.rssForm.processState) {
     case formProcessState.FAILED:
-      watchedState.rssForm.processState = formProcessState.FILLING;
       break;
 
     case formProcessState.FILLING:
@@ -18,7 +17,6 @@ export default function processWatcher(containers, watchedState) {
     case formProcessState.FINISHED:
       formInput.removeAttribute('readonly');
       submitButton.removeAttribute('disabled');
-      watchedState.rssForm.processState = formProcessState.FILLING;
       break;
 
     default:

@@ -1,6 +1,6 @@
 import * as yup from 'yup';
-import { fetchRSS } from './handlers';
-import { message } from '../constants';
+import { fetchRSS } from './processingRss';
+import { message } from './constants';
 
 const validate = (url, feeds) => {
   const existsUrls = feeds.map((feed) => feed.url);
@@ -34,17 +34,22 @@ export default function addUIHandlers(containers, watchedState) {
       .then((rssUrl) => {
         fetchRSS(watchedState, rssUrl);
       })
+      .then(() => {
+        watchedState.rssForm.isValid = true;
+      })
       .catch((error) => {
         watchedState.rssForm.error = error.message;
+        watchedState.rssForm.isValid = false;
       });
   });
 
   postsContainer.addEventListener('click', (event) => {
-    if (!event.target.dataset.id) {
+    const selectedId = event.target.dataset.id;
+    if (!selectedId) {
       return;
     }
 
-    watchedState.ui.watchedPosts.add(event.target.dataset.id);
-    watchedState.ui.selectedPost = event.target.dataset.id;
+    watchedState.ui.watchedPosts.add(selectedId);
+    watchedState.ui.selectedPost = selectedId;
   });
 }

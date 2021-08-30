@@ -54,7 +54,7 @@ describe('Test RSS App', () => {
   });
 
   test('Network error', async () => {
-    initNock(`${rssUrl}/feed`, {});
+    initNock();
     userEvent.type(interact.rssInput, `${rssUrl}/feed`);
     userEvent.click(interact.submitButton);
 

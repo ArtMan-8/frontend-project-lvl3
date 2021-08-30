@@ -1,8 +1,8 @@
 import 'bootstrap/js/dist/modal';
 import i18next from 'i18next';
 import renderUI from './renders/renderUI';
-import addUIHandlers from './handlers/addUIHandlers';
-import { postsRefetch } from './handlers/handlers';
+import addUIHandlers from './handlers';
+import { postsRefetch } from './processingRss';
 import mainWatcher from './watchers/mainWatcher';
 import resources from './locales';
 import { DEFAULT_LANGUAGE, formProcessState } from './constants';

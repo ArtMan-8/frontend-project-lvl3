@@ -5,9 +5,7 @@ import {
   formProcessState,
   PROXY_URL,
   FETCHING_TIMEOUT,
-} from '../constants';
-
-const isValidRss = (rssData) => rssData.indexOf('xml version') !== -1;
+} from './constants';
 
 export function getRss(url) {
   return axios
@@ -20,6 +18,10 @@ export function getRss(url) {
 export function parseRssData(rss) {
   const parser = new DOMParser();
   const parseData = parser.parseFromString(rss, 'application/xml');
+
+  if (parseData.getElementsByTagName('parsererror').length) {
+    return { isError: true };
+  }
 
   const feed = {
     title: parseData.querySelector('title').textContent,
@@ -57,23 +59,24 @@ export function fetchRSS(watchedState, rssUrl) {
 
   return getRss(rssUrl)
     .then((contents) => {
-      if (isValidRss(contents)) {
-        const rawData = parseRssData(contents);
-        const normalizedData = normalizeRssData(rawData);
+      const rawData = parseRssData(contents);
 
-        watchedState.posts.unshift(...normalizedData.posts);
-        watchedState.feeds.unshift({ url: rssUrl, ...normalizedData.feed });
-        watchedState.rssForm.error = message.SUCCESS;
-        watchedState.rssForm.error = null;
-      } else {
+      if (rawData.isError) {
         watchedState.rssForm.error = message.INVALID_RSS;
+        return;
       }
 
-      watchedState.rssForm.processState = formProcessState.FINISHED;
+      const normalizedData = normalizeRssData(rawData);
+
+      watchedState.posts.unshift(...normalizedData.posts);
+      watchedState.feeds.unshift({ url: rssUrl, ...normalizedData.feed });
+      watchedState.rssForm.error = null;
     })
     .catch(() => {
       watchedState.rssForm.error = message.NETWORK_ERROR;
-      watchedState.rssForm.processState = formProcessState.FAILED;
+    })
+    .finally(() => {
+      watchedState.rssForm.processState = formProcessState.FINISHED;
     });
 }
 
