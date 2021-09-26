@@ -3,7 +3,7 @@ import i18next from 'i18next';
 import renderUI from './renders/renderUI';
 import addUIHandlers from './handlers';
 import { postsRefetch } from './processingRss';
-import mainWatcher from './watchers/mainWatcher';
+import mainWatcher from './watcher';
 import resources from './locales';
 import { DEFAULT_LANGUAGE, formProcessState } from './constants';
 

@@ -3,49 +3,44 @@ import _ from 'lodash';
 import {
   message,
   formProcessState,
-  PROXY_URL,
   FETCHING_TIMEOUT,
+  PROXY_URL,
 } from './constants';
 
-export function getRss(url) {
-  return axios
-    .get(`${PROXY_URL}/get`, {
-      params: { url, disableCache: true },
-    })
-    .then(({ data }) => data.contents);
+function addProxy(url) {
+  return `${PROXY_URL}/get?url=${url}`;
 }
 
-export function parseRssData(rss) {
+function parseRssData(rss) {
   const parser = new DOMParser();
   const parseData = parser.parseFromString(rss, 'application/xml');
 
   if (parseData.getElementsByTagName('parsererror').length) {
-    return { isError: true };
+    throw new Error(message.INVALID_RSS);
   }
 
-  const feed = {
-    title: parseData.querySelector('title').textContent,
-    description: parseData.querySelector('description').textContent,
-  };
+  const title = parseData.querySelector('title').textContent;
+  const description = parseData.querySelector('description').textContent;
 
-  const posts = [...parseData.querySelectorAll('item')].map((item) => ({
+  const items = [...parseData.querySelectorAll('item')].map((item) => ({
     title: item.querySelector('title').textContent,
     description: item.querySelector('description').textContent,
     link: item.querySelector('link').textContent,
   }));
 
-  return { feed, posts };
+  return { title, description, items };
 }
 
-export function normalizeRssData(parsedData) {
-  const feedId = _.uniqueId();
+function normalizeRssData({ title, description, items }, oldFeedId = null) {
+  const feedId = oldFeedId || _.uniqueId();
 
   const feed = {
-    ...parsedData.feed,
+    title,
+    description,
     id: feedId,
   };
 
-  const posts = parsedData.posts.map((item) => ({
+  const posts = items.map((item) => ({
     ...item,
     id: _.uniqueId(),
     feedId,
@@ -54,42 +49,48 @@ export function normalizeRssData(parsedData) {
   return { feed, posts };
 }
 
+function getRss(url, feedId) {
+  return axios
+    .get(addProxy(url), {
+      params: { disableCache: true },
+    })
+    .catch(() => {
+      throw new Error(message.NETWORK_ERROR);
+    })
+    .then(({ data }) => parseRssData(data.contents))
+    .catch((error) => {
+      throw new Error(error.message);
+    })
+    .then((parsedData) => normalizeRssData(parsedData, feedId));
+}
+
 export function fetchRSS(watchedState, rssUrl) {
   watchedState.rssForm.processState = formProcessState.SENDING;
 
-  return getRss(rssUrl)
-    .then((contents) => {
-      const rawData = parseRssData(contents);
+  return getRss(rssUrl, watchedState)
+    .then((data) => {
+      watchedState.posts.unshift(...data.posts);
+      watchedState.feeds.unshift({ url: rssUrl, ...data.feed });
 
-      if (rawData.isError) {
-        watchedState.rssForm.error = message.INVALID_RSS;
-        return;
-      }
-
-      const normalizedData = normalizeRssData(rawData);
-
-      watchedState.posts.unshift(...normalizedData.posts);
-      watchedState.feeds.unshift({ url: rssUrl, ...normalizedData.feed });
       watchedState.rssForm.error = null;
+      watchedState.rssForm.processState = formProcessState.FINISHED;
     })
-    .catch(() => {
-      watchedState.rssForm.error = message.NETWORK_ERROR;
+    .catch((error) => {
+      watchedState.rssForm.error = error.message;
+      watchedState.rssForm.processState = formProcessState.FAILED;
     })
     .finally(() => {
-      watchedState.rssForm.processState = formProcessState.FINISHED;
+      watchedState.rssForm.processState = formProcessState.FILLING;
     });
 }
 
 export function postsRefetch(watchedState, delay = FETCHING_TIMEOUT) {
-  const requests = watchedState.feeds.map((feed) => getRss(feed.url).then((contents) => {
-    const rawData = parseRssData(contents);
-    const normalizedData = normalizeRssData(rawData);
-
+  const requests = watchedState.feeds.map((feed) => getRss(feed.url, feed.id).then((data) => {
     const posts = watchedState.posts.filter(
       ({ feedId }) => feedId === feed.id,
     );
 
-    const newPosts = _.differenceBy(normalizedData.posts, posts, 'title');
+    const newPosts = _.differenceBy(data.posts, posts, 'title');
     watchedState.posts.unshift(...newPosts);
   }));
 

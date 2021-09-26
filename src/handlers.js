@@ -1,6 +1,6 @@
 import * as yup from 'yup';
 import { fetchRSS } from './processingRss';
-import { message } from './constants';
+import { formProcessState, message } from './constants';
 
 const validate = (url, feeds) => {
   const existsUrls = feeds.map((feed) => feed.url);
@@ -40,6 +40,10 @@ export default function addUIHandlers(containers, watchedState) {
       .catch((error) => {
         watchedState.rssForm.error = error.message;
         watchedState.rssForm.isValid = false;
+        watchedState.rssForm.processState = formProcessState.FAILED;
+      })
+      .finally(() => {
+        watchedState.rssForm.processState = formProcessState.FILLING;
       });
   });
 
