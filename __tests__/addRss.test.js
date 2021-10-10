@@ -81,7 +81,6 @@ describe('Test RSS App', () => {
 
   test('RSS is exist', async () => {
     initNock(`${rssUrl}/feed`, rssResponse);
-
     userEvent.type(interact.rssInput, `${rssUrl}/feed`);
     userEvent.click(interact.submitButton);
 

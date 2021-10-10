@@ -65,15 +65,12 @@ function getRss(url, feedId) {
 }
 
 export function fetchRSS(watchedState, rssUrl) {
-  watchedState.rssForm.processState = formProcessState.SENDING;
-
   return getRss(rssUrl, watchedState)
     .then((data) => {
       watchedState.posts.unshift(...data.posts);
       watchedState.feeds.unshift({ url: rssUrl, ...data.feed });
 
       watchedState.rssForm.error = null;
-      watchedState.rssForm.processState = formProcessState.FINISHED;
     })
     .catch((error) => {
       watchedState.rssForm.error = error.message;

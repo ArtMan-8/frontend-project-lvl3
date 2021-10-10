@@ -27,12 +27,14 @@ export default function addUIHandlers(containers, watchedState) {
 
   rssForm.addEventListener('submit', (event) => {
     event.preventDefault();
+
     const formData = new FormData(event.target);
     const url = formData.get('url').trim();
 
     validate(url, watchedState.feeds)
       .then((rssUrl) => {
-        fetchRSS(watchedState, rssUrl);
+        watchedState.rssForm.processState = formProcessState.SENDING;
+        return fetchRSS(watchedState, rssUrl);
       })
       .then(() => {
         watchedState.rssForm.isValid = true;
@@ -43,7 +45,7 @@ export default function addUIHandlers(containers, watchedState) {
         watchedState.rssForm.processState = formProcessState.FAILED;
       })
       .finally(() => {
-        watchedState.rssForm.processState = formProcessState.FILLING;
+        watchedState.rssForm.processState = formProcessState.FINISHED;
       });
   });
 

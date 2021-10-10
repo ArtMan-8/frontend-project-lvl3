@@ -36,11 +36,11 @@ export default function mainWatcher(state, i18nextInstance, containers) {
 
       case 'feeds':
         renderFeeds(feedsContainer, i18nextInstance, watchedState);
+        formInput.value = '';
         break;
 
       case 'posts':
         renderPosts(postsContainer, i18nextInstance, watchedState);
-        formInput.value = '';
         break;
 
       case 'rssForm.isValid':
