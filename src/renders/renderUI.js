@@ -1,3 +1,6 @@
+import renderFeeds from './renderFeeds';
+import renderPosts from './renderPosts';
+
 export default function renderUI(containers, i18nextInstance, watchedState) {
   const {
     title,
@@ -8,6 +11,8 @@ export default function renderUI(containers, i18nextInstance, watchedState) {
     submitButton,
     exampleMessage,
     feedbackMessage,
+    feedsContainer,
+    postsContainer,
   } = containers;
 
   const { error } = watchedState.rssForm;
@@ -42,4 +47,7 @@ export default function renderUI(containers, i18nextInstance, watchedState) {
 
   feedbackMessage.textContent = feedbackMessage.textContent
     && i18nextInstance.t(error ? `errors.${error}` : 'success');
+
+  renderFeeds(feedsContainer, i18nextInstance, watchedState);
+  renderPosts(postsContainer, i18nextInstance, watchedState);
 }

@@ -1,14 +1,26 @@
 import 'bootstrap/js/dist/modal';
 import i18next from 'i18next';
+import { setLocale } from 'yup';
 import renderUI from './renders/renderUI';
 import addUIHandlers from './handlers';
 import { postsRefetch } from './processingRss';
 import mainWatcher from './watcher';
 import resources from './locales';
-import { DEFAULT_LANGUAGE, formProcessState } from './constants';
+import { DEFAULT_LANGUAGE, formProcessState, message } from './constants';
 
-function init() {
+export default function app() {
+  setLocale({
+    string: {
+      url: message.INVALID_URL,
+    },
+    mixed: {
+      notOneOf: message.FEED_EXISTS,
+      required: message.INVALID_RSS,
+    },
+  });
+
   const i18nextInstance = i18next.createInstance();
+
   return i18nextInstance
     .init({
       lng: DEFAULT_LANGUAGE,
@@ -50,12 +62,9 @@ function init() {
       addUIHandlers(containers, watchedState);
       postsRefetch(watchedState);
 
-      return { watchedState, i18nextInstance, containers };
+      return { watchedState, i18ni: i18nextInstance, containers };
+    })
+    .then(({ watchedState, i18ni, containers }) => {
+      renderUI(containers, i18ni, watchedState);
     });
-}
-
-export default function app() {
-  init().then(({ watchedState, i18nextInstance, containers }) => {
-    renderUI(containers, i18nextInstance, watchedState);
-  });
 }

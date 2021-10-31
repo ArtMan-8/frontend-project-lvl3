@@ -8,7 +8,7 @@ import {
 } from './constants';
 
 function addProxy(url) {
-  return `${PROXY_URL}/get?url=${url}`;
+  return `${PROXY_URL}/get?url=${url}&disableCache=true`;
 }
 
 function parseRssData(rss) {
@@ -51,33 +51,27 @@ function normalizeRssData({ title, description, items }, oldFeedId = null) {
 
 function getRss(url, feedId) {
   return axios
-    .get(addProxy(url), {
-      params: { disableCache: true },
-    })
-    .catch(() => {
-      throw new Error(message.NETWORK_ERROR);
-    })
+    .get(addProxy(url))
     .then(({ data }) => parseRssData(data.contents))
-    .catch((error) => {
-      throw new Error(error.message);
-    })
     .then((parsedData) => normalizeRssData(parsedData, feedId));
 }
 
 export function fetchRSS(watchedState, rssUrl) {
+  watchedState.rssForm.processState = formProcessState.SENDING;
+
   return getRss(rssUrl, watchedState)
     .then((data) => {
       watchedState.posts.unshift(...data.posts);
       watchedState.feeds.unshift({ url: rssUrl, ...data.feed });
 
       watchedState.rssForm.error = null;
+      watchedState.rssForm.processState = formProcessState.FINISHED;
     })
     .catch((error) => {
-      watchedState.rssForm.error = error.message;
+      watchedState.rssForm.error = axios.isAxiosError(error)
+        ? message.NETWORK_ERROR
+        : error.message;
       watchedState.rssForm.processState = formProcessState.FAILED;
-    })
-    .finally(() => {
-      watchedState.rssForm.processState = formProcessState.FILLING;
     });
 }
 

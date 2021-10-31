@@ -6,9 +6,10 @@ import i18next from 'i18next';
 import app from '../src/app';
 import { DEFAULT_LANGUAGE, message } from '../src/constants';
 import resources from '../src/locales';
-import renderContent from '../src/renders/renderContent';
 import renderMessage from '../src/renders/renderMessage';
 import renderModal from '../src/renders/renderModal';
+import renderFeeds from '../src/renders/renderFeeds';
+import renderPosts from '../src/renders/renderPosts';
 
 const pathToIndex = path.join('__fixtures__', 'index.html');
 const index = fs.readFileSync(pathToIndex, 'utf-8');
@@ -45,7 +46,8 @@ describe('Test renders', () => {
       feeds: [
         {
           id: '1',
-          title: 'Lorem ipsum feed for an interval of 1 minutes with 10 item(s)',
+          title:
+            'Lorem ipsum feed for an interval of 1 minutes with 10 item(s)',
           description: 'This is a constantly updating lorem ipsum feed',
         },
       ],
@@ -54,21 +56,24 @@ describe('Test renders', () => {
           id: '2',
           feedId: '1',
           title: 'Lorem ipsum 2021-08-21T08:57:00Z',
-          description: 'Amet incididunt duis consectetur occaecat occaecat pariatur duis aute veniam elit.',
+          description:
+            'Amet incididunt duis consectetur occaecat occaecat pariatur duis aute veniam elit.',
           link: 'http://example.com/test/1629536220',
         },
         {
           id: '3',
           feedId: '1',
           title: 'Lorem ipsum 2021-08-21T08:56:00Z',
-          description: 'Culpa officia consequat ut excepteur occaecat est reprehenderit tempor voluptate tempor consequat.',
+          description:
+            'Culpa officia consequat ut excepteur occaecat est reprehenderit tempor voluptate tempor consequat.',
           link: 'http://example.com/test/1629536160',
         },
         {
           id: '4',
           feedId: '1',
           title: 'Lorem ipsum 2021-08-21T08:55:00Z',
-          description: 'Occaecat magna velit incididunt incididunt ea sunt tempor qui laboris nostrud adipisicing fugiat sint.',
+          description:
+            'Occaecat magna velit incididunt incididunt ea sunt tempor qui laboris nostrud adipisicing fugiat sint.',
           link: 'http://example.com/test/1629536100',
         },
         {
@@ -82,28 +87,32 @@ describe('Test renders', () => {
           id: '6',
           feedId: '1',
           title: 'Lorem ipsum 2021-08-21T08:53:00Z',
-          description: 'Non mollit fugiat exercitation ullamco incididunt mollit nulla do minim duis.',
+          description:
+            'Non mollit fugiat exercitation ullamco incididunt mollit nulla do minim duis.',
           link: 'http://example.com/test/1629535980',
         },
         {
           id: '7',
           feedId: '1',
           title: 'Lorem ipsum 2021-08-21T08:52:00Z',
-          description: 'Est laborum occaecat commodo irure magna amet nulla eiusmod cillum pariatur excepteur et.',
+          description:
+            'Est laborum occaecat commodo irure magna amet nulla eiusmod cillum pariatur excepteur et.',
           link: 'http://example.com/test/1629535920',
         },
         {
           id: '8',
           feedId: '1',
           title: 'Lorem ipsum 2021-08-21T08:51:00Z',
-          description: 'Ea fugiat anim dolor laboris laboris voluptate veniam elit sunt ipsum.',
+          description:
+            'Ea fugiat anim dolor laboris laboris voluptate veniam elit sunt ipsum.',
           link: 'http://example.com/test/1629535860',
         },
         {
           id: '9',
           feedId: '1',
           title: 'Lorem ipsum 2021-08-21T08:50:00Z',
-          description: 'Aute eu ipsum laboris laboris culpa voluptate consequat non excepteur excepteur sit.',
+          description:
+            'Aute eu ipsum laboris laboris culpa voluptate consequat non excepteur excepteur sit.',
           link: 'http://example.com/test/1629535800',
         },
         {
@@ -137,11 +146,13 @@ describe('Test renders', () => {
   });
 
   test('content', async () => {
-    renderContent(
-      {
-        feedsContainer: interact.feedsContainer,
-        postsContainer: interact.postsContainer,
-      },
+    renderFeeds(
+      interact.feedsContainer,
+      interact.i18nextInstance,
+      interact.watchedState,
+    );
+    renderPosts(
+      interact.postsContainer,
       interact.i18nextInstance,
       interact.watchedState,
     );
@@ -156,11 +167,13 @@ describe('Test renders', () => {
       posts: [],
     };
 
-    renderContent(
-      {
-        feedsContainer: interact.feedsContainer,
-        postsContainer: interact.postsContainer,
-      },
+    renderFeeds(
+      interact.feedsContainer,
+      interact.i18nextInstance,
+      interact.watchedState,
+    );
+    renderPosts(
+      interact.postsContainer,
       interact.i18nextInstance,
       interact.watchedState,
     );
@@ -176,8 +189,9 @@ describe('Test renders', () => {
       interact.watchedState,
     );
 
-    const { title, description } = interact.watchedState.posts
-      .find(({ id }) => id === interact.watchedState.ui.selectedPost);
+    const { title, description } = interact.watchedState.posts.find(
+      ({ id }) => id === interact.watchedState.ui.selectedPost,
+    );
 
     expect(await screen.findByText(title)).toBeInTheDocument();
     expect(await screen.findByText(description)).toBeInTheDocument();

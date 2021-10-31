@@ -1,14 +1,10 @@
 import * as yup from 'yup';
 import { fetchRSS } from './processingRss';
-import { formProcessState, message } from './constants';
+import { formProcessState } from './constants';
 
 const validate = (url, feeds) => {
   const existsUrls = feeds.map((feed) => feed.url);
-  const schema = yup
-    .string()
-    .required()
-    .url(message.INVALID_URL)
-    .notOneOf(existsUrls, message.FEED_EXISTS);
+  const schema = yup.string().required().url().notOneOf(existsUrls);
 
   return schema.validate(url);
 };
@@ -33,19 +29,13 @@ export default function addUIHandlers(containers, watchedState) {
 
     validate(url, watchedState.feeds)
       .then((rssUrl) => {
-        watchedState.rssForm.processState = formProcessState.SENDING;
-        return fetchRSS(watchedState, rssUrl);
-      })
-      .then(() => {
         watchedState.rssForm.isValid = true;
+        return fetchRSS(watchedState, rssUrl);
       })
       .catch((error) => {
         watchedState.rssForm.error = error.message;
         watchedState.rssForm.isValid = false;
         watchedState.rssForm.processState = formProcessState.FAILED;
-      })
-      .finally(() => {
-        watchedState.rssForm.processState = formProcessState.FINISHED;
       });
   });
 

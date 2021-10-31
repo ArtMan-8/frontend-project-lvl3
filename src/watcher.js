@@ -4,7 +4,6 @@ import renderFeeds from './renders/renderFeeds';
 import renderMessage from './renders/renderMessage';
 import renderPosts from './renders/renderPosts';
 import renderUI from './renders/renderUI';
-import renderContent from './renders/renderContent';
 import renderModal from './renders/renderModal';
 
 export default function mainWatcher(state, i18nextInstance, containers) {
@@ -22,7 +21,6 @@ export default function mainWatcher(state, i18nextInstance, containers) {
       case 'ui.language':
         i18nextInstance.changeLanguage(value).then(() => {
           renderUI(containers, i18nextInstance, watchedState);
-          renderContent(containers, i18nextInstance, watchedState);
         });
         break;
 
@@ -58,11 +56,11 @@ export default function mainWatcher(state, i18nextInstance, containers) {
         switch (watchedState.rssForm.processState) {
           case formProcessState.FAILED:
             renderMessage(feedbackMessage, i18nextInstance, watchedState);
+            formInput.removeAttribute('readonly');
+            submitButton.removeAttribute('disabled');
             break;
 
           case formProcessState.FILLING:
-            formInput.removeAttribute('readonly');
-            submitButton.removeAttribute('disabled');
             break;
 
           case formProcessState.SENDING:
@@ -72,6 +70,8 @@ export default function mainWatcher(state, i18nextInstance, containers) {
 
           case formProcessState.FINISHED:
             renderMessage(feedbackMessage, i18nextInstance, watchedState);
+            formInput.removeAttribute('readonly');
+            submitButton.removeAttribute('disabled');
             break;
 
           default:
